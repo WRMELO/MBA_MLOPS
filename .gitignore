@@ -208,3 +208,6 @@ mlruns/
 
 # Obsidian cache (se for dentro do Vault)
 .obsidian/workspace
+
+.obsidian/workspace.json
+
