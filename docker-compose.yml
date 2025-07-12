@@ -1,0 +1,37 @@
+# docker-compose.yml — QuantumFinance (MinIO + DevContainer)
+
+version: "3.8"
+
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    container_name: devcontainer-mba-mlops
+    volumes:
+      - .:/workspace
+    networks:
+      - mlops_network
+    tty: true  # VS Code interativo
+
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio-server
+    ports:
+      - "9000:9000"  # API S3 emulado
+      - "9001:9001"  # Painel web MinIO
+    environment:
+      MINIO_ROOT_USER: wrm
+      MINIO_ROOT_PASSWORD: senha_segura
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - mlops_network
+
+volumes:
+  minio_data:
+
+networks:
+  mlops_network:
+    driver: bridge
