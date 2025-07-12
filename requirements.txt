@@ -1,3 +1,11 @@
+cookiecutter
+mlflow
+dvc[all]
+fastapi
+uvicorn
+streamlit
+slowapi
+minio
 ipython
 jupyterlab
 loguru
@@ -13,4 +21,4 @@ ruff
 scikit-learn
 tqdm
 typer
--e .
+
