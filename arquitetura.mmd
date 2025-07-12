@@ -1,0 +1,43 @@
+flowchart LR
+  subgraph Usuário["👤 Usuário Final"]
+    U[Input de dados]
+  end
+
+  subgraph Frontend["🌐 Streamlit App"]
+    ST[Interface de coleta de dados]
+  end
+
+  subgraph API["⚙️ FastAPI (API + Auth + Throttling)"]
+    FAPI[Modelo carregado]
+  end
+
+  subgraph Storage["🗃️ MinIO (S3-like)"]
+    M[Dados & Modelos]
+  end
+
+  subgraph Versionamento["🔗 DVC"]
+    D[DVC controla versão]
+  end
+
+  subgraph Ambiente["👨‍💻 DevContainer (VSCode)"]
+    DEV[Ambiente isolado]
+  end
+
+  subgraph Git["🔁 Git/GitHub"]
+    G[Repositório de código]
+  end
+
+  subgraph Experimentos["📊 MLflow (opcional)"]
+    ML[Runs e métricas]
+  end
+
+  %% Fluxo principal
+  U --> ST --> FAPI
+  FAPI --> M
+  D --> M
+  DEV --> D
+  DEV --> FAPI
+  DEV --> ST
+  DEV --> G
+  ML --> FAPI
+  ML --> M

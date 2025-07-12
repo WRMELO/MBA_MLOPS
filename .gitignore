@@ -184,3 +184,27 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# ===============================
+# COMPLEMENTOS PARA MLOps
+# ===============================
+
+# DVC - Ignora dados reais mas mantém metadados
+/data/
+!data/.gitignore
+!data/*.dvc
+
+# MinIO client config (opcional se tiver credenciais locais)
+*.minio
+
+# MLflow runs (opcional se usar local)
+mlruns/
+
+# VS Code
+.vscode/
+
+# DevContainer NÃO IGNORAR
+!.devcontainer/
+
+# Obsidian cache (se for dentro do Vault)
+.obsidian/workspace

@@ -1,61 +1,46 @@
-# MBA_MLOPS_faty7098
+# MBA_MLOPS
 
-<a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
-    <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
-</a>
+# 🗂️ Projeto QuantumFinance — Score de Crédito
 
-CADEIRA MLOPS FIAP 9DTSC
+Este repositório contém a estrutura base para o desenvolvimento do sistema de Score de Crédito **QuantumFinance**, alinhado às práticas de MLOps e reprodutibilidade.
 
-## Project Organization
+---
 
-```
-├── LICENSE            <- Open-source license if one is chosen
-├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
-├── README.md          <- The top-level README for developers using this project.
-├── data
-│   ├── external       <- Data from third party sources.
-│   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── docs               <- A default mkdocs project; see www.mkdocs.org for details
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`.
-│
-├── pyproject.toml     <- Project configuration file with package metadata for 
-│                         mba_mlops_faty7098 and configuration for tools like black
-│
-├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-├── setup.cfg          <- Configuration file for flake8
-│
-└── mba_mlops_faty7098   <- Source code for use in this project.
-    │
-    ├── __init__.py             <- Makes mba_mlops_faty7098 a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Scripts to download or generate data
-    │
-    ├── features.py             <- Code to create features for modeling
-    │
-    ├── modeling                
-    │   ├── __init__.py 
-    │   ├── predict.py          <- Code to run model inference with trained models          
-    │   └── train.py            <- Code to train models
-    │
-    └── plots.py                <- Code to create visualizations
-```
+## 📌 **Visão Geral**
 
---------
+- Estrutura organizada com `DevContainer` para garantir ambiente de desenvolvimento isolado.
+- Versionamento de dados e modelos com **DVC** e **MinIO** (substitui S3).
+- API segura implementada com **FastAPI**, autenticação e throttling.
+- Frontend interativo com **Streamlit**.
+- Rastreamento de experimentos com **MLflow**.
+- Versionamento de código com **Git/GitHub**.
 
+---
+
+## 🗺️ **Arquitetura do Projeto**
+
+A arquitetura geral do sistema está representada no diagrama abaixo:
+
+![Arquitetura](references/docs/arquitetura.svg)
+
+
+**⚠️ Observação:**  
+> 🔒 Este caminho é **local** e estático:
+> `C:\Users\wilso\MBA_MLOPS\desenvolvimento\arquitetura.svg`  
+> Lembre-se de incluir a versão final do diagrama dentro da pasta `/docs` do repositório remoto ou configurar para que fique acessível via URL do GitHub Pages, se desejar.
+
+---
+
+## ⚙️ **Estrutura Recomendada**
+
+```plaintext
+📁 projeto/
+ ├── .devcontainer/         # Configuração do ambiente VSCode
+ ├── data/                  # Dados versionados via DVC
+ ├── notebooks/             # Notebooks de EDA e pré-processamento
+ ├── src/                   # Código-fonte da API e scripts
+ ├── models/                # Modelos treinados
+ ├── Streamlit/             # Aplicação frontend
+ ├── docs/arquitetura.svg   # Diagrama renderizado para documentação
+ ├── README.md              # Este arquivo
+ └── docker-compose.yml     # Orquestração local
