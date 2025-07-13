@@ -25,3 +25,7 @@ minio_data/
 
 # Outros
 .DS_Store
+.obsidian/workspace.json
+.obsidian/workspace.json
+docker-compose.yml.bak
+*.log
