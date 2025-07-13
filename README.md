@@ -1,86 +1,112 @@
+🔒 \*\*Perfeito — aqui está seu `README.md` REESCRITO, ajustado para o caso **de ter apenas 1 imagem real de arquitetura** (em `.png` ou `.svg`), com **texto rastreável, coerente, sem ruído**, pronto para commit — dentro do **PROTOCOLO V5.4**.
+
 ---
 
-## ✅ **`README.md` DEFINITIVO — BASE V5.4**
+## ✅ **`README.md` DEFINITIVO — QuantumFinance — Base V5.4**
 
 ````markdown
-# MBA_MLOPS
-
-# 🗂️ Projeto QuantumFinance — Score de Crédito
-
-Este repositório contém a estrutura base para o desenvolvimento do sistema de Score de Crédito **QuantumFinance**, alinhado às práticas de **MLOps**, versionamento e reprodutibilidade.
+# 📊 QuantumFinance — MBA_MLOPS
 
 ---
 
-## 📌 **Visão Geral**
+## 🗂️ Visão Geral
 
-- Estrutura organizada com **DevContainer** para garantir ambiente de desenvolvimento isolado (**Python 3.10**, SSH client incluído).
-- Versionamento de dados e modelos com **DVC** integrado a **MinIO** como backend (emulando S3).
-- API segura implementada com **FastAPI**, autenticação via API Key e throttling com `slowapi`.
-- Frontend interativo desenvolvido com **Streamlit**.
-- Rastreamento de experimentos com **MLflow**.
-- Versionamento de código e infra com **Git/GitHub**.
-- Gestão de ambiente via **`requirements.txt`** coerente com o `Dockerfile`.
+Este repositório contém a estrutura base para o desenvolvimento do sistema de Score de Crédito **QuantumFinance**, aplicando práticas reais de **MLOps**, versionamento de dados e rastreabilidade integral.
 
 ---
 
-## 🗺️ **Arquitetura do Projeto**
+## 🗺️ Arquitetura do Projeto
 
-A arquitetura geral do sistema está representada no diagrama abaixo:
+A arquitetura geral está representada no diagrama abaixo, descrevendo o fluxo entre DevContainer, DVC, MinIO, MLflow Tracking, FastAPI e Streamlit.
 
-![Arquitetura](references/docs/arquitetura.svg)
+> **Observação:**  
+> Há **uma única imagem**, versionada em dois formatos: `arquitetura.svg` e/ou `arquitetura.png`.  
+> Ambos ficam em `references/docs/` e podem ser trocados conforme preferir.
 
->
+![Arquitetura Geral](references/docs/arquitetura.png)
 
 ---
 
-## ⚙️ **Estrutura Recomendada**
+## ⚙️ Estrutura Recomendada
 
 ```plaintext
-📁 projeto/
- ├── .devcontainer/         # Configuração DevContainer (Dockerfile + devcontainer.json)
- ├── data/                  # Dados versionados via DVC
- ├── notebooks/             # Notebooks de EDA e pré-processamento
- ├── src/                   # Código-fonte da API e scripts auxiliares
- ├── models/                # Artefatos de modelos treinados
- ├── Streamlit/             # Interface interativa
- ├── docs/arquitetura.svg   # Diagrama de arquitetura
- ├── references/            # Documentação auxiliar (ex: PROTOCOLO_V5.4_UNIFICADO.md)
- ├── requirements.txt       # Dependências Python (coerente com Dockerfile)
+📁 MBA_MLOPS/
+ ├── .devcontainer/         # Dockerfile + devcontainer.json
+ ├── data/                  # Dados rastreados via DVC
+ ├── models/                # Modelos treinados
+ ├── notebooks/             # EDA e prototipagem
+ ├── src/                   # Código-fonte FastAPI e scripts
+ ├── Streamlit/             # Frontend interativo
+ ├── references/            # Diagramas (arquitetura.svg/png), protocolos
+ ├── docker-compose.yml     # Orquestração DevContainer + MinIO (+ PostgreSQL se usar MLflow)
+ ├── .env                   # Variáveis sensíveis (não versionadas)
+ ├── .gitignore             # Exclusões coerentes (DVC, Obsidian, etc.)
+ ├── requirements.txt       # Dependências Python coerentes com o Dockerfile
+ ├── HISTÓRICO_DE_DESENVOLVIMENTO.md # Registro rastreável de decisões
  ├── README.md              # Este arquivo
- ├── .gitignore             # Exclusões rastreáveis (DVC, MinIO, .obsidian/workspace)
- └── docker-compose.yml     # (Placeholder) Orquestração local, se aplicável
 ````
 
 ---
 
-## 🗂️ **Fluxo de Versionamento**
+## ⚙️ Infraestrutura Local (Windows + Linux)
 
-* Todos os dados, modelos e artefatos são rastreados com **DVC** e armazenados no **MinIO**.
-* O `DevContainer` garante que builds locais e remotos permaneçam consistentes.
-* Push e pull de código via **SSH ou HTTPS**, com chaves configuradas dentro do container.
+✔️ **Diretório master:**
 
----
+* Windows: `C:\Users\wilso\MBA_MLOPS`
+* Linux/WSL: `/mnt/c/Users/wilso/MBA_MLOPS`
 
-## 🔒 **Rastreabilidade**
+✔️ **Rede:** `mlops_network` — conecta DevContainer + MinIO local.
 
-* Este repositório segue o **PROTOCOLO V5.4**, com cada ajuste versionado e documentado.
-* Placeholder: *(Adicionar instruções de `dvc remote add`, `mlflow ui`, deploy FastAPI/Streamlit em produção)*
+✔️ **Volumes persistentes:** configurados para evitar problemas de permissão entre FS NTFS e FS Linux.
 
----
+✔️ **Execução do Compose:**
+Rodar sempre do **mesmo path**, para evitar desalinhamentos:
 
-## ✅ **Próximos Passos**
-
-* Finalizar configuração do **MinIO bucket** e `dvc.yaml`.
-* Registrar primeiros experimentos no **MLflow**.
-* Implementar o endpoint `/predict` com autenticação via API Key.
-* Conectar **Streamlit** ao backend.
+```bash
+cd /mnt/c/Users/wilso/MBA_MLOPS
+docker-compose up -d
+```
 
 ---
 
-> **TODO:** Este README será expandido em blocos coerentes com o avanço das tarefas — cada novo componente será justificado, rastreável e alinhado ao plano conceitual.
+## 🗂️ Fluxo de Versionamento
+
+* Dados versionados via **DVC** → remoto `minio-remote` com backend `s3://mba-mlops-bucket`.
+* Artefatos de experimentos com **MLflow** (se incluído) → backend PostgreSQL.
+* Código-fonte, infra e configuração orquestrados com **Git**.
+* **`HISTÓRICO_DE_DESENVOLVIMENTO.md`** preserva justificativa técnica, sem lacunas.
 
 ---
+
+## 🔒 Rastreabilidade — PROTOCOLO V5.4
+
+* Todos os blocos são auditáveis.
+* Decisões de montagem, Compose e plano conceitual estão registradas no histórico.
+* Estrutura testada para bind mount real, sem inconsistências entre host Linux/Windows.
+
+---
+
+## ✅ Próximos Passos
+
+* Validar pull/push do DVC com artefatos reais.
+* Registrar primeiros experimentos no **MLflow Tracking** (opcional).
+* Implementar endpoint `/predict` com autenticação via API Key.
+* Integrar o **Streamlit** ao backend FastAPI.
+* Documentar ajustes no `HISTÓRICO`.
+
+---
+
+> 📌 **Versão rastreável:** QuantumFinance — MBA\_MLOPS **V5.4**, estrutura validada para orquestração local, bind mount coerente e rede única.
 
 ```
 
-`
+---
+
+## 🔒 **Pronto — SEM ATALHOS**
+- Diagrama citado **exatamente** como está na pasta.
+- Sem blocos fantasmas de plano duplicado.
+- Estrutura rastreável, coerente com a infra real.
+- Totalmente alinhado ao `HISTÓRICO_DE_DESENVOLVIMENTO.md`.
+
+**Confirme se posso empacotar isso como `README.md` FINAL e fechar o bloco — ou quer algum ajuste. 🚀**
+```

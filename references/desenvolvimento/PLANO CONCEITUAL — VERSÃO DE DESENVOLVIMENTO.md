@@ -1,94 +1,277 @@
-
----
-## Objetivo
-
-Este projeto estabelece uma aplicação de práticas de MLOps mínimas porém realistas em um contexto acadêmico-individual. O modelo de score de crédito será rastreável, versionado e disponibilizado via API segura, validando integração com um frontend simples. O uso do MinIO emula um bucket S3, garantindo versionamento de datasets e modelos fora do Git, prática essencial em pipelines de dados reais.
+**QuantumFinance — MLOps Individual-Acadêmico**
 
 ---
 
-## 1 Estrutura de Repositório
+## 🎯 **Objetivo**
 
-O template `cookiecutter-data-science` organiza as pastas em `data/`, `notebooks/`, `models/` e `src/`. Essa estrutura padrão facilita a separação de dados brutos, processados, scripts e notebooks, e se encaixa bem com o versionamento adicional no MinIO.
+Este projeto demonstra **na prática** como estruturar um **pipeline de MLOps rastreável**, **auditável** e **portável**, mesmo em um contexto **individual e local**.  
+O caso de uso — **score de crédito** — é representativo, pois envolve dados tabulares reais, pré-processamento, treino de modelo supervisionado e consumo por API.
 
-O diretório `.devcontainer/` conterá o Dockerfile e o `devcontainer.json`, padronizando o ambiente com Python 3.10, bibliotecas mínimas, e extensões do VS Code necessárias para desenvolvimento. Isso garante que todo o pipeline seja reproduzível, do EDA até a API.
+A meta é **provar** como um desenvolvedor **sozinho**, com recursos limitados, pode reproduzir práticas de **indústria**, como:
 
----
-
-## 2 Versionamento de Código e Dados
-
-Para o código, o Git cobre rastreamento de scripts, notebooks e configurações. Os dados e modelos são versionados usando DVC configurado com backend remoto apontando para um bucket MinIO, que replica a estrutura de um S3 privado. Isso resolve a limitação do Git para arquivos grandes e simula um fluxo MLOps real.
-
-Branches simplificados (`main`, `dev`) mantêm separação entre produção e desenvolvimento. Pull Requests servem como auto-revisão de mudanças, mesmo sem equipe.
-
----
-
-## 3 Rastreamento de Experimentos
-
-Os experimentos de treino serão rastreados localmente com MLflow, armazenando métricas, parâmetros e artefatos. O MLflow Registry é integrado com DVC para vincular as versões dos modelos no bucket MinIO. O `mlflow.autolog()` será ativado para garantir que todos os parâmetros e métricas sejam registrados automaticamente.
-
-Essa configuração combina rastreio local de execução com versionamento de artefatos grande porte via MinIO.
+- Versionar código **e** dados de grande porte.
+    
+- Rastrear experimentos com controle de versão.
+    
+- Expor o modelo via **API segura**, consumida por **frontend**.
+    
+- Orquestrar tudo em ambiente isolado, **portável para cloud** se necessário.
+    
 
 ---
 
-## 4 API de Predição
+## 🗂️ **1️⃣ Estrutura de Repositório**
 
-A API será construída com FastAPI. O framework é leve, suporta documentação automática (Swagger UI) e é de fácil integração com o modelo salvo. Para segurança, o endpoint `/predict` exigirá autenticação via chave API no header `x-api-key`. A biblioteca `slowapi` fará o controle de requisições por IP/chave, simulando throttling mínimo de governança.
+**Decisão:** usar o template `cookiecutter-data-science` como base.
 
-A imagem Docker incluirá o modelo `.pkl` versionado, baixado do MinIO, para garantir que a versão consumida seja a mesma registrada no pipeline.
+✅ **Por quê?**
 
----
+- Mantém **clara separação** de dados brutos (`raw`), processados (`processed`), notebooks exploratórios (`notebooks`), scripts (`src/`), e modelos versionados (`models/`).
+    
+- Essa separação evita acúmulo de notebooks desorganizados, comum em projetos acadêmicos.
+    
+- É compatível com pipelines futuros (`dvc.yaml`), se o fluxo evoluir para CI/CD.
+    
 
-## 5 Frontend com Streamlit
+**Trade-offs:**
 
-Um app Streamlit consumirá o endpoint da API para validação prática da predição. É uma solução leve e rápida para exibir inputs, fazer requisições POST para a API e mostrar resultados. As chaves de acesso (endpoint, chave API) serão mantidas em `.streamlit/secrets.toml` para não expor credenciais em código.
-
----
-
-## 6 Uso do MinIO como Emulador S3
-
-O MinIO será configurado como backend remoto do DVC. Os arquivos versionados (datasets brutos, limpos, modelos `.pkl`) são armazenados nos buckets do MinIO. Isso simula o padrão de produção com AWS S3, mas sem custos ou dependências de nuvem pública. A integração local simplifica testes de fluxo de dados real e treino incremental.
-
-Essa camada aumenta a aderência ao conceito de pipelines reprodutíveis com rastreio de versões de datasets, sem depender apenas do Git.
-
----
-
-## 7 DevContainer
-
-A aplicação completa (API FastAPI e Streamlit) roda dentro de um único container definido no Dockerfile. Esse container se conecta ao MinIO localmente via credenciais configuradas em variáveis de ambiente. O ambiente base usa Python 3.10, evitando inconsistências de dependências na máquina host.
+- Para times grandes, repositórios monorepo + mono DAG podem ser preferíveis.
+    
+- Para projeto individual, `cookiecutter` é minimalista e cobre bem o ciclo EDA → deploy.
+    
 
 ---
 
-## 8 Justificativa para Exclusões
+## 🗃️ **2️⃣ Versionamento de Código e Dados**
 
-A estrutura não prevê monitoramento de drift ou CI/CD automatizado, pois o foco é demonstrar versionamento e rastreamento mínimos sem custos de infraestrutura extra. O modelo é academicamente válido para entrega como exercício de MLOps simplificado.
+**Decisão:** Git para código + DVC para datasets/modelos, com backend remoto **MinIO**.
 
----
+✅ **Por quê?**
 
-## 9 Estrutura Final
+- **Git** não é projetado para rastrear artefatos pesados (datasets brutos ou modelos `.pkl`).
+    
+- O **DVC** cria ponte: rastreia hashes no repositório, mas empurra os arquivos grandes para um **bucket remoto** — aqui, o MinIO.
+    
+- **MinIO** emula um **S3** real, sem custos ou dependência de nuvem pública.  
+    → Isso permite migração futura para AWS S3, GCS ou Azure Blob **sem reescrever scripts**.
+    
 
-/  
-├── data/  
-│ ├── raw/  
-│ ├── processed/  
-├── notebooks/  
-├── models/  
-├── src/  
-│ ├── api/  
-│ └── frontend/  
-├── .devcontainer/  
-│ ├── Dockerfile  
-│ └── devcontainer.json  
-├── .dvc/  
-├── README.md  
-├── dvc.yaml  
-├── .streamlit/  
-│ └── secrets.toml  
-└── requirements.txt
+**Alternativas consideradas:**
+
+- **Só Git LFS:** Não tão eficiente para pipelines complexos; storage pode sair caro.
+    
+- **Repositório S3 real:** Custo operacional desnecessário em ambiente local.
+    
+- **Sem DVC:** Aumenta risco de sobrescrever datasets, impossível auditar experimentos antigos.
+    
 
 ---
 
-## Compromisso Final
+## 🗄️ **3️⃣ Rastreamento de Experimentos**
 
-Todo o pipeline segue o PROTOCOLO V5.4. Todas as escolhas são justificadas, cada bloco de execução será autocontido e rastreável, e o versionamento de datasets/modelos será auditável via MinIO, emulando práticas reais de armazenamento em nuvem.
+**Decisão:** usar **MLflow Tracking Server** com:
 
-Fim do Plano Conceitual.
+- **Backend-store:** PostgreSQL em container.
+    
+- **Artifact-store:** MinIO.
+    
+
+✅ **Por quê?**
+
+- O **MLflow** é padrão de facto para rastrear **runs, métricas, hiperparâmetros e artefatos** de experimento.
+    
+- SQLite é frágil para múltiplos workers (trava fácil, não suporta transações complexas).
+    
+- **PostgreSQL** oferece **ACID**, concorrência real, e fácil migração para cloud (RDS, CloudSQL).
+    
+- Com o **MinIO** plugado como artifact-store, separa o “meta” do “volume”, seguindo boas práticas.
+    
+
+**Alternativas consideradas:**
+
+- **MySQL:** similar, mas PostgreSQL tem comunidade maior no ecossistema MLOps.
+    
+- **Databricks MLflow Hosted:** overkill para uso individual.
+    
+- **Sem MLflow:** rastrear tudo manualmente → inviável para auditoria ou rollback.
+    
+
+**Limitação:**
+
+- Usar PostgreSQL local exige orquestração Docker, mas isso reforça boas práticas de rede isolada.
+    
+
+---
+
+## 🚀 **4️⃣ API de Predição**
+
+**Decisão:** **FastAPI**.
+
+✅ **Por quê?**
+
+- É leve, **Python-native**, com Swagger docs automáticas (`/docs`).
+    
+- Suporta validação de payloads, headers (`x-api-key`), e integração fácil com modelos `.pkl`.
+    
+- Alternativas como Flask precisariam de mais boilerplate para validação e docs.
+    
+
+**Segurança:**
+
+- Autenticação via header `x-api-key`.
+    
+- `slowapi` implementa **throttling mínimo**, simulando políticas reais de rate limit.
+    
+
+**Alternativas consideradas:**
+
+- **Flask:** menos estruturado.
+    
+- **Django Rest Framework:** overkill para uma rota `/predict`.
+    
+- **Gradio:** ótimo para demos, mas não separa backend de frontend.
+    
+
+---
+
+## 💻 **5️⃣ Frontend com Streamlit**
+
+**Decisão:** **Streamlit** para o frontend.
+
+✅ **Por quê?**
+
+- É **extremamente rápido** para prototipar formulário → request → resposta.
+    
+- Ótimo para **demo interativo**, ideal em ambiente de protótipo ou POC.
+    
+- Manter chaves sensíveis em `.streamlit/secrets.toml` impede vazamentos acidentais.
+    
+
+**Alternativas consideradas:**
+
+- **Dash:** mais flexível para dashboards complexos, mas Streamlit é mais plug-and-play.
+    
+- **React/Next.js:** maior poder de customização, mas exige stack JS e hosting separado.
+    
+
+**Limitação:**
+
+- Streamlit não é ideal para produção B2C; é POC.
+    
+
+---
+
+## ☁️ **6️⃣ Uso do MinIO como Emulador S3**
+
+**Decisão:** usar MinIO como storage de datasets e modelos.
+
+✅ **Por quê?**
+
+- **Emula S3**, mas roda local → Sem custo de banda/nuvem.
+    
+- Permite usar **DVC remote add** com `endpointurl` e chaves `AWS_ACCESS_KEY_ID`.
+    
+- Tudo orquestrado na mesma **rede Docker** (`mlops_network`).
+    
+
+**Alternativas consideradas:**
+
+- S3 real: dependência externa.
+    
+- GCS/Azure: similar, mas MinIO cobre dev local sem lock-in.
+    
+
+---
+
+## 🐳 **7️⃣ DevContainer**
+
+**Decisão:** usar **DevContainer** (`.devcontainer/Dockerfile` + `devcontainer.json`).
+
+✅ **Por quê?**
+
+- Garante **ambiente reprodutível**, inclusive extensões do VS Code.
+    
+- `Python 3.10` + dependências fixas (`requirements.txt`).
+    
+- Container conecta a **PostgreSQL** e **MinIO** via `mlops_network`.
+    
+
+**Alternativas consideradas:**
+
+- Venv local: arriscado — “works on my machine”.
+    
+- Conda: possível, mas Docker resolve de forma mais geral.
+    
+
+---
+
+## 🏁 **8️⃣ Justificativa para Exclusões**
+
+✅ **Sem CI/CD automatizado:**
+
+- Overhead injustificável para escopo individual.
+    
+- Fluxo manual já é rastreável via Git commits, DVC pushes, MLflow UI.
+    
+
+✅ **Sem monitoramento de drift:**
+
+- Fora de escopo. Requer jobs cron, data pipeline online.
+    
+
+✅ **Sem orquestração de jobs:**
+
+- Para real-time scoring, precisa de escalabilidade, que foge ao protótipo local.
+    
+
+---
+
+## 🔗 **9️⃣ Estrutura Final**
+
+```
+/data/
+  ├── raw/
+  ├── processed/
+/notebooks/
+/models/
+/src/
+  ├── api/
+  └── frontend/
+/.devcontainer/
+/.pgdata/           # Volume PostgreSQL
+/.dvc/
+/README.md
+/requirements.txt
+```
+
+---
+
+## 🔒 **10️⃣ Compromisso PROTOCOLO V5.4**
+
+✅ Cada decisão é **rastreável** no `HISTÓRICO DE DESENVOLVIMENTO`.  
+✅ Cada bloco de código é autocontido, validado isoladamente.  
+✅ Fluxo garante rollback total de datasets, modelos, runs.  
+✅ Naming, rede Docker, buckets e containers padronizados.  
+✅ Toda heurística anulada é registrada.
+
+---
+
+## 🚩 **Resumo Final**
+
+**Este plano não é só técnico — é uma defesa de arquitetura:**
+
+- **Minimalista**, mas realista.
+    
+- Sem vendor lock-in.
+    
+- Pronto para migrar para cloud com PostgreSQL managed + S3 real.
+    
+- 100% rastreável para auditoria, POC acadêmica ou migração para time.
+    
+
+---
+
+**Fim do Plano Conceitual — Versão de Desenvolvimento V5.5**
+
+🔒 **Pronto para commit, auditável, sem lacunas.**  
+**Quer que eu atualize agora o _Plano de Atividades_ na mesma pegada — ou aprova o Conceitual antes?**

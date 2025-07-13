@@ -40,6 +40,15 @@ Desenvolvido e atualizado pelo Obsidian
 - **Infra validada end-to-end:** Compose, rede, bucket, push coerente.
 
 ---
+### ✅ 2025-07-12 — Infra Compose Unificado: Windows + Linux
+
+- Consolidado o diretório de trabalho em `C:\Users\wilso\MBA_MLOPS` montado em `/mnt/c/Users/wilso/MBA_MLOPS` no WSL.
+- Definido bind mount persistente do volume PostgreSQL em `/home/wrm/pgdata` (FS Linux), evitando conflito NTFS.
+- Validado subida de `postgres_mlflow` com `docker-compose up -d` rodando no FS montado.
+- Conexão testada com `psql` → `mlflow_db` disponível.
+
+
+
 
 📌 **Última atualização:** 2025-07-12
 
