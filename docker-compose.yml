@@ -1,21 +1,6 @@
-# docker-compose.yml — QuantumFinance (MinIO + DevContainer + postregSQL)
-
 version: "3.8"
 
 services:
-  devcontainer:
-    build:
-      context: .
-      dockerfile: .devcontainer/Dockerfile
-    container_name: devcontainer_mba_mlops
-    volumes:
-      - .:/workspace:cached
-    networks:
-      - mlops_network
-    depends_on:
-      - postgres_mlflow
-      - minio
-
   postgres_mlflow:
     image: postgres:15
     container_name: postgres_mlflow
@@ -25,7 +10,7 @@ services:
       POSTGRES_PASSWORD: senha_segura
       POSTGRES_DB: mlflow_db
     ports:
-      - "5432:5432"   # Exponha se precisar conectar localmente; remova se não precisar
+      - "5432:5432"
     volumes:
       - /home/wrm/pgdata:/var/lib/postgresql/data
     networks:
@@ -34,7 +19,7 @@ services:
   minio:
     image: minio/minio
     container_name: minio
-    command: server /data --console-address ":9001"
+    restart: always
     environment:
       MINIO_ROOT_USER: wrm
       MINIO_ROOT_PASSWORD: senha_segura
@@ -43,10 +28,24 @@ services:
       - "9001:9001"
     volumes:
       - ./minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - mlops_network
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: mlflow
+    restart: always
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres_mlflow
+      - minio
     networks:
       - mlops_network
 
 networks:
   mlops_network:
     driver: bridge
-
