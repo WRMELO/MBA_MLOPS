@@ -53,6 +53,45 @@ Desenvolvido e atualizado pelo Obsidian
 📌 **Última atualização:** 2025-07-12
 
 
+
+---
+
+### ✅ 2025-07-12 — Continuação: Decisão de Migração Windows ➝ Linux
+
+- Após validar a infraestrutura com **DevContainer**, **MinIO**, **DVC** e **docker-compose** rodando no ambiente Windows/WSL, detectou-se **confusão estrutural recorrente** entre:
+  - Bind mounts entre **NTFS (Windows)** e **FS Linux (WSL)**.
+  - Caminhos misturados (`/mnt/c/...` vs `/home/wrm/...`), gerando **inconsistências em push/pull** de artefatos pesados.
+  - Problemas para renderizar imagens no `README.md` devido a divergências de versionamento local vs. GitHub.
+
+- Identificado também ruído na montagem do **Vault Obsidian**:
+  - Configuração do Vault duplicada entre host Windows e WSL.
+  - Estado do `.obsidian/` nem sempre coerente com o repositório Git.
+
+- **Ambiente Windows/WSL** exigia Docker Desktop para orquestração, mas:
+  - O `docker compose` V2 rodava em NTFS, sofrendo permissões inconsistentes em volumes persistentes.
+  - A rede `mlops_network` ficava sujeita a travamentos se paths não estivessem 100% alinhados.
+
+- Para eliminar todos os riscos de permissões cruzadas, foi decidido:
+  1️⃣ **Zerar o repositório WSL**, re-clonar o master `MBA_MLOPS` no **notebook Linux nativo**.
+  2️⃣ Configurar o **Docker Engine CE** diretamente via `apt` (sem Snap), garantindo compatibilidade total com Compose V2.
+  3️⃣ Recriar o ambiente de chaves SSH, vinculando `id_ed25519` ao GitHub com `noreply` para push rastreável.
+  4️⃣ Tornar o ambiente **rootless** para `docker`, adicionando `wrm` ao grupo `docker`.
+
+- A partir desta etapa:
+  - **Infraestrutura**: `docker.sh` criado na pasta pessoal (`/home/wrm/`) para orquestrar Compose por CLI puro, sem Docker Desktop.
+  - **Vault Obsidian**: Consolidado no mesmo clone, garantido em `/home/wrm/MBA_MLOPS`.
+  - **DevContainer**: Mantido na mesma rede `mlops_network`, agora 100% Linux-native, sem bind mount de NTFS.
+  - **Navegador recomendado**: Brave ou Chromium, para evitar lentidão no render do ChatGPT.
+
+✅ Essa decisão **encerra o uso híbrido Windows/WSL** e garante rastreabilidade total:
+  - Repositório Git unificado.
+  - Backend MinIO coerente.
+  - Rede Docker e containers rodando sem bloqueio de permissão.
+
+---
+
+📌 **Última atualização:** 2025-07-12
+
 ---
 
 ### ✅ [PLACEHOLDER] Próximas entradas

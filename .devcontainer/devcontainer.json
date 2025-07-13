@@ -1,23 +1,15 @@
 {
-  // Nome amigável do DevContainer, aparece na barra inferior do VS Code
-  "name": "mba-mlops-devcontainer",
-
-  // Define o build: qual Dockerfile e onde
-  "build": {
-    "dockerfile": "Dockerfile",
-    "context": "."
-  },
-
-  // Configurações internas do VS Code dentro do container
-  "settings": {
-    "terminal.integrated.shell.linux": "/bin/bash"
-  },
-
-  // Extensões do VS Code instaladas automaticamente
-  "extensions": [
-    "ms-python.python",
-    "ms-azuretools.vscode-docker"
-  ],
-
-  
+    "name": "MBA_MLOPS DevContainer",
+    "context": "..",
+    "dockerFile": "Dockerfile",
+    "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "ms-azuretools.vscode-docker"
+    ],
+    "remoteUser": "vscode"
 }
