@@ -23,7 +23,7 @@ A arquitetura geral está representada no diagrama abaixo, descrevendo o fluxo e
 > Há **uma única imagem**, versionada em dois formatos: `arquitetura.svg` e/ou `arquitetura.png`.  
 > Ambos ficam em `references/docs/` e podem ser trocados conforme preferir.
 
-![Arquitetura Geral](references/docs/arquitetura.png)
+![Arquitetura Geral](references/docs/arquitetura.svg)
 
 ---
 
