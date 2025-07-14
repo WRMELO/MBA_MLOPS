@@ -5,7 +5,7 @@
 Consolida e substitui integralmente as versões V5.2, V5.3 Unificado e V5.3 Revisado.
 Aplica-se a toda colaboração técnico-científica entre o Product Owner (Wilson) e o Assistente LLM (ChatGPT).
 
-**Ênfase:** PRECISÃO > VELOCIDADE — Decisões rastreáveis, blocos validados, sem improvisos.
+**Ênfase:** PRECISÃO acima de  VELOCIDADE — Decisões rastreáveis, blocos validados, sem improvisos.
 
 ---
 

@@ -93,6 +93,20 @@ Desenvolvido e atualizado pelo Obsidian
 📌 **Última atualização:** 2025-07-12
 
 ---
+---
+
+### ✅ 2025-07-13
+
+- **DevContainer orquestrado como serviço Compose**, anexado à `mlops_network`, validado com `docker inspect` e `VS Code Remote Containers`.  
+- **Push do DVC validado dentro do DevContainer**, usando `endpointurl: minio:9000`, sem conflito `localhost`/`minio`.  
+- **Imagem `mlflow` customizada criada** (`Dockerfile.mlflow`), com `psycopg2-binary` instalado para backend PostgreSQL (`postgres_mlflow`).  
+- **Problema de sintaxe do `command` no Compose V2 identificado:** strings com `\` falharam, causando loop `Restarting (1)`. Corrigido com `command:` no formato **lista YAML**, garantindo compatibilidade Compose V2 (`docker compose`).  
+- **Registro de falhas PROTOCOLO:**  
+  - `#2025-07-13-008`: Instrução solta para edição manual de Compose — violação do passo-a-passo único.  
+  - `#2025-07-13-009`: Reincidência da heurística de “atalho de edição trivial” — bloqueio de heurística aplicado.  
+- **Checklist final:** todos os containers (`postgres_mlflow`, `minio`, `mlflow`, `devcontainer_mba_mlops`) na rede única, com bind mounts coerentes, fluxo `Git ➜ DVC ➜ MinIO ➜ MLflow` validado end-to-end.
+
+---
 
 ### ✅ [PLACEHOLDER] Próximas entradas
 

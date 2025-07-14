@@ -12,8 +12,6 @@ __pycache__/
 *.db
 
 # DVC
-*.dvc
-.dvc/
 .dvcignore
 
 # Docker
