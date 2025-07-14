@@ -144,6 +144,21 @@ Desenvolvido e atualizado pelo Obsidian
 - **Pronto para fase de modelagem com MLflow:** `train_clean.csv` e `test_clean.csv` auditáveis, versionados, push confirmados no bucket `mba-mlops-bucket`, preparados para rastreamento de experimentos.
 
 
+### ✅ 2025-07-14 — Curated Layer Finalizada, Diagnóstico de Cardinalidade e Experimento Baseline no MLflow
+
+- **Camada `curated/` criada:** consolidou `train_curated.csv` (~3,6 GiB) e `test_curated.csv` (~1,8 GiB), 100% numerificados e prontos para aprendizado supervisionado.
+- **Diagnóstico de alta cardinalidade:** executado com `tqdm` para mapeamento de colunas não numéricas — identificados casos críticos (`ID`, `Customer_ID`, `Type_of_Loan`).
+- **Feature engineering aplicado:** `binning` de `Num_of_Loan` e mapeamento de `Month` para valores numéricos, revisado dentro de notebook.
+- **Processo de versionamento revisado:** push incremental `dvc push` executado no terminal externo, remote duplicado removido para manter `storage` como default único.
+- **Credenciais MinIO (`wrm` / `senha_segura`) exportadas dentro do container e kernel Python — evitada falha `NoCredentialsError`.
+- **`MLFLOW_S3_ENDPOINT_URL` configurado explicitamente:** apontando para `http://minio:9000` para garantir que `boto3` não busque AWS real.
+- **Experimento baseline rodado:** Árvore de Decisão (`max_depth=5`), tracking `mlflow` validado com `tqdm` no loop de fitting.
+- **Tracking URI interno mantido como `http://mlflow:5000`**, com links finais padronizados para `http://127.0.0.1:5000` para entrega acadêmica.
+- **Output final rastreável:** Accuracy e F1 Score registrados, artefato salvo no backend MinIO/S3.
+- **Pronto para expandir:** próximo passo é escalar para `GridSearchCV` e múltiplos runs rastreados com `mlflow`.
+
+📌 **Decisão fixada:** todos os blocos técnicos devem manter barra de progresso `tqdm` para fitting e splits mais demorados, com credenciais e endpoints explicitamente declarados dentro do notebook.
+
 
 ### ✅ [PLACEHOLDER] Próximas entradas
 
