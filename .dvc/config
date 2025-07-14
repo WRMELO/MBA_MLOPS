@@ -1,11 +1,6 @@
 [core]
     remote = storage
     autostage = true
-['remote "minio-remote"']
-    url = s3://mba-mlops-bucket
-    access_key_id = wrm
-    secret_access_key = senha_segura
-    endpointurl = http://minio:9000
 ['remote "storage"']
     url = s3://mba-mlops-bucket/
     endpointurl = http://minio:9000

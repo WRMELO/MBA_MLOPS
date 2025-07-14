@@ -125,6 +125,26 @@ Desenvolvido e atualizado pelo Obsidian
   - Registro da anulação de qualquer inferência automática de path até o fim do projeto.
 - **Pronto para EDA:** dados reais versionados, cache local e remoto coerentes, rastreio Git pendente de commit final.
 
+### ✅ 2025-07-14 — EDA, Pré-processamento e Consolidação dos Datasets Finalizados
+
+- **Notebook de EDA revisitado:** executado dentro do DevContainer com Kernel validado em `/workspace` para coerência de paths.
+- **Pipeline de pré-processamento concluído:** 
+  - Conversão de tipos numéricos (`Age`, `Outstanding_Debt`, etc.) com coerção `pd.to_numeric(errors='coerce')`.
+  - Imputação de valores ausentes em colunas numéricas com mediana calculada no treino.
+  - Substituição de placeholders (`_______`, `!@9#%8`, etc.) por `Unknown` em colunas categóricas.
+  - Exclusão de colunas puramente identificadoras (`ID`, `Customer_ID`, `Name`, `SSN`).
+  - Codificação de variáveis categóricas (`Month`, `Occupation`, `Credit_Mix`, `Payment_Behaviour`) com `pd.get_dummies()`, garantindo consistência.
+- **`train_clean.csv` salvo em `data/processed/`** na raiz do repositório `/workspace`, versionado com `DVC` e push realizado com sucesso para o backend MinIO.
+- **Consolidação do conjunto de teste:** 
+  - Aplicação do **mesmo pipeline** do treino (`train_clean.csv`) ao `test.csv`, garantindo coerência de features.
+  - `test_clean.csv` salvo em `data/processed/` com **path coerente**, corrigindo tentativas anteriores que geraram diretórios `data/` abaixo de `notebooks/`.
+  - Versão final do `test_clean.csv` registrada com `DVC`, push para MinIO validado e commit no Git coerente.
+- **Decisão estratégica:** camada `curated/` mantida como **fase posterior**, pois toda codificação e limpeza final permanecem dentro de `processed/` por ora, alinhado ao escopo do exercício.
+- **Registro de falha evitada:** identificado que rodar `dvc add` com `CWD` incorreto (`/workspace/notebooks`) causava erros de `working_dir`. Adotada conferência obrigatória de `CWD` antes de versionamento.
+- **Pronto para fase de modelagem com MLflow:** `train_clean.csv` e `test_clean.csv` auditáveis, versionados, push confirmados no bucket `mba-mlops-bucket`, preparados para rastreamento de experimentos.
+
+
+
 ### ✅ [PLACEHOLDER] Próximas entradas
 
 - _Exemplo: Configuração do `dvc remote` com backend MinIO finalizada._
