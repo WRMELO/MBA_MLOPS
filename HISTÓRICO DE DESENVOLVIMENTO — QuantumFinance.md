@@ -107,6 +107,23 @@ Desenvolvido e atualizado pelo Obsidian
 - **Checklist final:** todos os containers (`postgres_mlflow`, `minio`, `mlflow`, `devcontainer_mba_mlops`) na rede única, com bind mounts coerentes, fluxo `Git ➜ DVC ➜ MinIO ➜ MLflow` validado end-to-end.
 
 ---
+### ✅ 2025-07-14 — Ingestão Final e Versionamento dos Dados Reais
+
+- **Download real executado via `kagglehub`**, dataset `credit-score-classification` baixado dentro do DevContainer, seguindo rede Compose única.
+- **Diretório `data/raw/` estruturado** na raiz `/workspace`, corrigindo conflitos com `notebooks/data`.
+- **Movimentação do dataset validada** usando `path` real sem heurísticas, garantindo que `train.csv` (~30 MiB) e `test.csv` (~15 MiB) estão presentes.
+- **Pipeline de versionamento revisado:** 
+  - `git rm --cached` aplicado para garantir que `data/raw/` não estivesse rastreado diretamente pelo Git.
+  - `dvc add` executado corretamente a partir do nível `/workspace/notebooks` com path relativo `../data/raw`.
+  - Cache `.dvc/cache/files/md5/` gerado com 4 blobs: 2 para os CSVs reais, 1 `.dir` e 1 bloco de controle.
+- **`dvc push` realizado no terminal do container**, empurrando chunks para `mba-mlops-bucket/files/md5` no MinIO.
+- **Verificação do backend MinIO feita via `mc`:**
+  - `mc alias set` configurado dentro do container.
+  - Blobs listados via `mc ls --recursive` confirmaram presença real dos hashes MD5 no bucket remoto.
+- **Correção de heurísticas:**  
+  - Registro da falha de working dir causado por Kernel em `/workspace/notebooks` versus terminal em `/workspace`.
+  - Registro da anulação de qualquer inferência automática de path até o fim do projeto.
+- **Pronto para EDA:** dados reais versionados, cache local e remoto coerentes, rastreio Git pendente de commit final.
 
 ### ✅ [PLACEHOLDER] Próximas entradas
 
@@ -123,5 +140,4 @@ Desenvolvido e atualizado pelo Obsidian
 
 ---
 
-📌 **Última atualização:** 2025-07-12
 
