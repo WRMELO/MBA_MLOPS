@@ -182,6 +182,22 @@ Desenvolvido e atualizado pelo Obsidian
 - Todos os blocos de versionamento devem usar verificação de `CWD` e `os.path.exists()` para evitar conflitos de path.
 - Versionamento deve ser atômico: coerção numérica e categórica não mais separadas em blocos múltiplos.
 
+### ✅ 2025-07-15 — Consolidação FINAL CURATED V1.1 + Fitting supervisionado rastreado
+
+- **Nova camada `CURATED V1.1` criada:** binning supervisionado revisado, agrupamento de categorias raras e OHE restrito aplicado apenas em variáveis com sentido de negócio (`Month`, `Occupation_Group`, `Payment_Behaviour`).
+- **Diagnóstico de footprint:** shape reduzido de ~6.300 colunas para apenas 93, validando fitting local sem OOM Killer.
+- **Versionamento atômico:** `train_curated_v1_1.csv` e `test_curated_v1_1.csv` adicionados via `dvc add`, `dvc push` realizado com sucesso para o bucket `mba-mlops-bucket` no MinIO.
+- **Fitting supervisionado baseline rodado:** `DecisionTreeClassifier` (`max_depth=5`), com `LabelEncoder` aplicado para eliminar colunas `object` remanescentes (`_Binned`, `Credit_History_Age`).
+- **Endpoint S3 dentro do container corrigido:** troca de `127.0.0.1` para `minio:9000` garantiu persistência do modelo no backend MinIO sem erro `ConnectionClosedError`.
+- **Tracking MLflow validado:** servidor `mlflow` na mesma rede Compose, exposto via `127.0.0.1:5000` para acesso local, com artefato salvo no bucket remoto.
+- **Resultados do baseline:** Accuracy **0.6881**, F1 Macro **0.6519** — coerente com os parâmetros supervisionados.
+- **Decisão fixada:** 
+  - `127.0.0.1` jamais usado como endpoint interno para persistência de artefatos.
+  - Todos os blocos de fitting devem manter export explícito de `MLFLOW_S3_ENDPOINT_URL` com nome de serviço Docker.
+  - Prints de acesso ao `127.0.0.1:5000` ficam apenas para acesso do UI fora do container.
+
+📌 Pronto para Grid Search supervisionado, tuning de hiperparâmetros ou pipeline de stacking, mantendo rastreabilidade integral conforme **PROTOCOLO V5.4**.
+
 ### ✅ [PLACEHOLDER] Próximas entradas
 
 - _Exemplo: Configuração do `dvc remote` com backend MinIO finalizada._

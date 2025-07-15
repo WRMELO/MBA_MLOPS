@@ -1,0 +1,14 @@
+artifact_uri: file:///workspace/notebooks/mlruns/604912714123659266/b22b0dd25d504881a6b7add61cfd087b/artifacts
+end_time: 1752613157738
+entry_point_name: ''
+experiment_id: '604912714123659266'
+lifecycle_stage: active
+run_id: b22b0dd25d504881a6b7add61cfd087b
+run_name: random_forest_v1.1_curated
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1752613155767
+status: 3
+tags: []
+user_id: root
