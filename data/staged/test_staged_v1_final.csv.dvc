@@ -1,0 +1,5 @@
+outs:
+- md5: 2ed3aa685948b7313e265c3a72a995e1
+  size: 20131262
+  hash: md5
+  path: test_staged_v1_final.csv
