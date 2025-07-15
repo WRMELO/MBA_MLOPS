@@ -166,6 +166,22 @@ Desenvolvido e atualizado pelo Obsidian
 - **Decisão:** Foi suspenso o push final desta versão. Optou-se por **reabrir o notebook `feature_engineering_curadoria.ipynb`** para executar uma nova abordagem de Feature Engineering focada em **reduzir cardinalidade**, com binning, agrupamento de categorias raras e encoding controlado.
 - **Próximo passo registrado:** A nova camada `Curated` só será consolidada e versionada no DVC após passar por validação de footprint de memória, garantindo fitting viável em ambiente local, em aderência ao **PROTOCOLO V5.4**.
 
+### ✅ 2025-07-15 — Consolidação Final do STAGED e Versionamento Rastreável
+
+- **Pipeline `STAGED V1 FINAL` concluído:** unificou coerção numérica por `Occupation`, variáveis textuais limpas (`Occupation`, `Type_of_Loan_Category`), binning interpretável (`Amount_invested_monthly`, `Monthly_Balance`, `Outstanding_Debt`, `Credit_Utilization_Ratio`) e One-Hot Encoding com `CategoricalDtype` fixo.
+- **Kernel interrompido anteriormente por inconsistências em `working_dir`:** detectada divergência entre `/workspace/notebooks` e `/workspace/data/` no root Git. Ponto fixo: todos os comandos `dvc add` e `git add` passam a usar caminho absoluto `/workspace/data/` dentro do notebook.
+- **Bloco técnico unificado criado em Python puro (`subprocess`):** sem `!`, rodando `dvc add`, `git add`, `git commit` e `dvc push` coerente. Falha do `git add .gitignore` registrada — corrigido com verificação `os.path.exists()`.
+- **Verificação de shape final:** `TRAIN` com 46 colunas, `TEST` com 45, mantendo `Credit_Score` somente no treino (target).
+- **Checklist final do `STAGED`:**
+  - `train_staged_v1_final.csv` e `test_staged_v1_final.csv` versionados com DVC.
+  - Push concluído para o backend MinIO (`mba-mlops-bucket`).
+  - Commit Git coerente, sem rastrear dados brutos.
+- **Pronto para promoção ao `CURATED`:** consolidar numéricos coeridos + texto + binning/OHE como snapshot baseline rastreável.
+
+📌 **Decisão fixada no PROTOCOLO V5.4:**  
+- Todos os blocos de versionamento devem usar verificação de `CWD` e `os.path.exists()` para evitar conflitos de path.
+- Versionamento deve ser atômico: coerção numérica e categórica não mais separadas em blocos múltiplos.
+
 ### ✅ [PLACEHOLDER] Próximas entradas
 
 - _Exemplo: Configuração do `dvc remote` com backend MinIO finalizada._
