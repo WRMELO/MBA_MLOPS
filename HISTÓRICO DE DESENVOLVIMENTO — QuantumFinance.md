@@ -160,6 +160,12 @@ Desenvolvido e atualizado pelo Obsidian
 📌 **Decisão fixada:** todos os blocos técnicos devem manter barra de progresso `tqdm` para fitting e splits mais demorados, com credenciais e endpoints explicitamente declarados dentro do notebook.
 
 
+### ✅ 2025-07-14 — Kernel interrompido por alta cardinalidade e decisão de reabrir Feature Engineering
+
+- **Situação:** Durante o pipeline `Curated`, o kernel Jupyter foi interrompido repetidas vezes por estouro de memória (OOM Killer). Diagnóstico preliminar indicou que o dataset final atingiu ~6.300 colunas, geradas por `get_dummies()` indiscriminado, inviabilizando fitting local mesmo em ambiente i9 com 32 GB RAM.
+- **Decisão:** Foi suspenso o push final desta versão. Optou-se por **reabrir o notebook `feature_engineering_curadoria.ipynb`** para executar uma nova abordagem de Feature Engineering focada em **reduzir cardinalidade**, com binning, agrupamento de categorias raras e encoding controlado.
+- **Próximo passo registrado:** A nova camada `Curated` só será consolidada e versionada no DVC após passar por validação de footprint de memória, garantindo fitting viável em ambiente local, em aderência ao **PROTOCOLO V5.4**.
+
 ### ✅ [PLACEHOLDER] Próximas entradas
 
 - _Exemplo: Configuração do `dvc remote` com backend MinIO finalizada._
