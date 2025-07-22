@@ -198,6 +198,31 @@ Desenvolvido e atualizado pelo Obsidian
 
 📌 Pronto para Grid Search supervisionado, tuning de hiperparâmetros ou pipeline de stacking, mantendo rastreabilidade integral conforme **PROTOCOLO V5.4**.
 
+### ✅ 2025-07-22 — Inferência Final Random Forest Tuned com Tracking MLflow
+
+- **Problema identificado:** tentativa de carregar modelo via `mlflow.sklearn.load_model("runs:/...")` resultou em `MlflowException: Run not found`, mesmo com artefatos salvos no bucket MinIO.
+- **Diagnóstico resolvido:** diretório `.mlruns` estava presente e válido, mas o MLflow não estava apontando corretamente para ele.
+- **Correção aplicada:** inserido `mlflow.set_tracking_uri("file:/workspace/.mlruns")` explicitamente no notebook, evitando heurísticas.
+- **Inferência executada com sucesso:** 
+  - Recarregou o modelo da execução `"4e56a5afe29a4a26b962c220fef03f5d"`;
+  - Reaplicou `OrdinalEncoder` usando as colunas categóricas do treino;
+  - Removeu a coluna `Credit_Score` do conjunto de teste;
+  - Realizou predição final no `test_curated_v1_1.csv`;
+  - Salvou o resultado em `/workspace/data/predictions/random_forest_final_test_predictions.csv`;
+  - As predições apresentaram coerência com distribuição prevista.
+
+---
+
+### ✅ 2025-07-22 — Preparação para Versionamento Final das Predições com DVC
+
+- **Bloco de `dvc add` executado**, mas resultou em erro de `dubious ownership` no Git (`exit status 128`) ao tentar adicionar o `.dvc`.
+- **Motivo do erro:** Git recusou-se a operar dentro do diretório `/workspace` por não considerá-lo seguro, conforme política de segurança interna.
+- **Solução registrada e aplicada:** inserido comando:
+  
+  ```bash
+  git config --global --add safe.directory /workspace
+
+
 ### ✅ [PLACEHOLDER] Próximas entradas
 
 - _Exemplo: Configuração do `dvc remote` com backend MinIO finalizada._
