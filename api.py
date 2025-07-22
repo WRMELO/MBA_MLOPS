@@ -1,91 +1,72 @@
-# api.py
+# 🔧 ETAPA: API FastAPI PARA ENTREGA — COM SEGURANÇA, THROTTLING E MODELO .PKL
 
-import os
-import pandas as pd
-import mlflow
-import mlflow.sklearn
-from fastapi import FastAPI, Header, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException, Request, Header
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from sklearn.preprocessing import OrdinalEncoder
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+import pandas as pd
+import joblib
+import traceback
+import os
 
-# Configuração do MLflow Tracking URI
-mlflow.set_tracking_uri("file:/workspace/.mlruns")
+# 1️⃣ Configuração geral da API
+app = FastAPI(title="API Score de Crédito — QuantumFinance")
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# Identificação do modelo salvo no MLflow
-MODEL_RUN_ID = "4e56a5afe29a4a26b962c220fef03f5d"
-MODEL_URI = f"runs:/{MODEL_RUN_ID}/random_forest_tuned_model"
-TRAIN_CSV = "/workspace/data/curated/train_curated_v1_1.csv"
+# 2️⃣ Variáveis e segurança
+API_KEY = os.getenv("API_KEY", "quantum123")  # Use variável de ambiente em produção
 
-# Carregamento do modelo treinado
-model = mlflow.sklearn.load_model(MODEL_URI)
+# 3️⃣ Caminhos dos artefatos
+model_path = "/workspace/models/final_model.pkl"
+encoder_path = "/workspace/models/final_encoder.pkl"
 
-# Carregamento e treinamento do encoder
-df_train = pd.read_csv(TRAIN_CSV)
-X_train = df_train.drop(columns=["Credit_Score"])
-object_cols = X_train.select_dtypes(include="object").columns.tolist()
+# 4️⃣ Carrega modelo e encoder salvos localmente
+try:
+    model = joblib.load(model_path)
+    encoder = joblib.load(encoder_path)
+    categorical_cols = encoder.feature_names_in_.tolist()
+except Exception as e:
+    raise RuntimeError(f"Erro ao carregar modelo ou encoder: {e}")
 
-encoder = OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=-1)
-encoder.fit(X_train[object_cols])
-
-# Mapeamento de labels
-label_map = {0: "Poor", 1: "Standard", 2: "Good"}
-
-# Carregamento da chave de autenticação
-API_KEY = os.environ.get("API_KEY", "default_secret")
-
-# Definição do schema de entrada
+# 5️⃣ Esquema da entrada
 class InputData(BaseModel):
-    Age_Binned: int
-    Amount_invested_monthly_Binned: int
-    Annual_Income_Binned: int
-    Changed_Credit_Limit_Binned: int
-    Credit_History_Age: float
-    Credit_History_Age_Binned: int
-    Credit_Mix: int
-    Credit_Utilization_Ratio_Binned: int
-    Delay_from_due_date_Binned: int
-    Interest_Rate_Binned: int
-    Monthly_Balance_Binned: int
-    Monthly_Inhand_Salary_Binned: int
-    Num_Bank_Accounts_Binned: int
-    Num_Credit_Card_Binned: int
-    Num_Credit_Inquiries_Binned: int
-    Num_of_Delayed_Payment_Binned: int
-    Num_of_Loan_Binned: int
-    Occupation: int
-    Outstanding_Debt_Binned: int
-    Payment_of_Min_Amount: int
-    Total_EMI_per_month_Binned: int
-    Type_of_Loan: int
+    data: dict
 
-# Criação do app FastAPI
-app = FastAPI()
-
-# Middleware para CORS (caso haja frontend separado)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Endpoint de predição
+# 6️⃣ Endpoint de predição com throttling e autenticação
 @app.post("/predict")
-def predict(data: InputData, x_api_key: str = Header(...)):
-
+@limiter.limit("5/minute")
+async def predict(request: Request, input_data: InputData, x_api_key: str = Header(...)):
     if x_api_key != API_KEY:
-        raise HTTPException(status_code=401, detail="Invalid API Key")
+        raise HTTPException(status_code=401, detail="Chave de API inválida.")
 
-    # Conversão para DataFrame
-    input_df = pd.DataFrame([data.dict()])
+    try:
+        df = pd.DataFrame([input_data.data])
 
-    # Aplicação do encoding
-    input_df[object_cols] = encoder.transform(input_df[object_cols])
+        # Substituição de placeholders
+        placeholders = ['_______', '__ __ ____', '!@9#%8']
+        df.replace(placeholders, 'Unknown', inplace=True)
 
-    # Inferência
-    prediction = model.predict(input_df)[0]
-    label = label_map.get(prediction, "Unknown")
+        # Conversão de Credit_History_Age
+        if 'Credit_History_Age' in df.columns:
+            years = df['Credit_History_Age'].str.extract(r'(\d+)\s+Years?')[0].astype(float)
+            months = df['Credit_History_Age'].str.extract(r'(\d+)\s+Months?')[0].fillna(0).astype(float)
+            df['Credit_History_Age'] = (years * 12 + months).fillna(0)
 
-    return {"prediction": label}
+        # Conversão de colunas numéricas possíveis
+        for col in df.select_dtypes(include='object').columns:
+            if df[col].str.replace('.', '', 1).str.isnumeric().all():
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+
+        # Aplica o encoder
+        df[categorical_cols] = encoder.transform(df[categorical_cols])
+        prediction = model.predict(df)[0]
+
+        return {"prediction": prediction}
+
+    except Exception as e:
+        tb = traceback.format_exc()
+        raise HTTPException(status_code=500, detail=f"Erro interno: {str(e)}\n{tb}")

@@ -1,0 +1,14 @@
+artifact_uri: file:///workspace/.mlruns/820994813064391927/db7c939c8f454742adde0499ccfcd47d/artifacts
+end_time: 1753218143183
+entry_point_name: ''
+experiment_id: '820994813064391927'
+lifecycle_stage: active
+run_id: db7c939c8f454742adde0499ccfcd47d
+run_name: random_forest_otimizado
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1753218141225
+status: 3
+tags: []
+user_id: root

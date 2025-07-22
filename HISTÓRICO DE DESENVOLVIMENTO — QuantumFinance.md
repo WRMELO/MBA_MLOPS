@@ -229,13 +229,40 @@ Desenvolvido e atualizado pelo Obsidian
 - _Exemplo: Registro do primeiro experimento no MLflow._
 - _Exemplo: Deploy do FastAPI em ambiente de homologação._
 
----
 
 ## 🔒 Observações
 
 - Este histórico faz parte das **boas práticas de rastreabilidade MLOps**, complementando o versionamento do Git.
 - Mantém contexto de decisões para revisões, auditorias ou reuso futuro.
 
----
 
+### ❌ 2025-07-22 — Falha Crítica de Persistência para Consumo pela API (Erro #2025-07-22-014)
 
+- **Erro detectado:** O pipeline de modelagem supervisionada seguiu corretamente o rastreamento com MLflow, mas **não salvou externamente o modelo final nem o encoder**, inviabilizando o uso da API `api.py`.
+- **Causa raiz:** O modelo foi rastreado via MLflow (`run_id: 4e56a5afe29a4a26b962c220fef03f5d`), mas o `OrdinalEncoder`, essencial para transformar os dados de entrada, **foi recriado dinamicamente no notebook e não serializado**.
+- **Impacto:** A API não consegue realizar predições, pois não possui os arquivos `.pkl` necessários. Tentativas de inferência geraram `MlflowException` ou `KeyError` ao aplicar transformações.
+- **Gravidade:** ALTA — falha estrutural, rompe rastreabilidade, viola o Plano de Atividades (etapa 7) e o PROTOCOLO V5.4, item 2.3 e 3.1.
+- **Correção aplicada:** Criação imediata de bloco técnico para:
+  - Recarregar modelo com `mlflow.sklearn.load_model(...)`;
+  - Recriar e persistir `OrdinalEncoder`;
+  - Salvar ambos em `/workspace/models/final_model.pkl` e `/workspace/models/final_encoder.pkl`.
+- **Ação preventiva:** A partir deste ponto, **toda etapa de fitting será obrigatoriamente acompanhada de bloco de persistência externa** para garantir compatibilidade com API e deploy.
+
+### ✅ 2025-07-22 — Substituição do Modelo Base por Random Forest Otimizado + Registro no MLflow
+
+- **Motivação:** O modelo anterior (`DecisionTreeClassifier(max_depth=5)`) apresentou acurácia limitada (~0.689), inferior à performance registrada em execuções anteriores (~0.79).
+- **Decisão técnica:** Substituir completamente a etapa `RECONSTRUÇÃO FINAL DO MODELO COM TRATAMENTO COMPLETO CONFORME CURATED V1.1`, adotando `RandomForestClassifier` com `GridSearchCV` (5 folds) e parâmetros realistas.
+- **Tratamento replicado:** Reaplicação total do pipeline `curated_v1_1`, incluindo substituição de placeholders, conversão de `Credit_History_Age`, coerção de tipos e `OrdinalEncoder` supervisionado com controle para desconhecidos.
+- **Resultado final:** Melhor configuração:  
+  `{'max_depth': 20, 'max_features': 'sqrt', 'min_samples_leaf': 3, 'n_estimators': 100}`  
+  Acurácia no conjunto de treino: **0.8803**
+- **Persistência:** 
+  - Modelo salvo localmente em: `/workspace/models/final_model.pkl`
+  - Encoder salvo localmente em: `/workspace/models/final_encoder.pkl`
+- **Registro MLflow:**
+  - Tracking URI: `file:/workspace/.mlruns`
+  - Experimento: `modelo_otimizado_rf`
+  - Run name: `random_forest_otimizado`
+  - Parâmetros, métrica e artefato registrados com sucesso.
+
+📌 Pronto para inferência via `api.py` com artefatos rastreáveis e performance validada.

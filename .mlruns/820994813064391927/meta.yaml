@@ -1,0 +1,6 @@
+artifact_location: file:///workspace/.mlruns/820994813064391927
+creation_time: 1753218139777
+experiment_id: '820994813064391927'
+last_update_time: 1753218139777
+lifecycle_stage: active
+name: modelo_otimizado_rf
