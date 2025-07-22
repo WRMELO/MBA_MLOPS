@@ -1,0 +1,14 @@
+artifact_uri: file:///workspace/notebooks/mlruns/604912714123659266/8c69052a7cb4408d9cad9a25808db16e/artifacts
+end_time: 1752614684908
+entry_point_name: ''
+experiment_id: '604912714123659266'
+lifecycle_stage: active
+run_id: 8c69052a7cb4408d9cad9a25808db16e
+run_name: hgb_split_v1.1_curated
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1752614683788
+status: 3
+tags: []
+user_id: root

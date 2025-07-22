@@ -1,0 +1,10 @@
+artifact_location: file:///workspace/notebooks/mlruns/604912714123659266/models/m-2f34674fdbe044aa8561b4fdd68313d5/artifacts
+creation_timestamp: 1752614683799
+experiment_id: '604912714123659266'
+last_updated_timestamp: 1752614684907
+model_id: m-2f34674fdbe044aa8561b4fdd68313d5
+model_type: null
+name: hgb_model
+source_run_id: 8c69052a7cb4408d9cad9a25808db16e
+status: 2
+status_message: null

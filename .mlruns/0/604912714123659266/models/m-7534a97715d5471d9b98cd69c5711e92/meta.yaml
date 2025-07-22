@@ -1,0 +1,11 @@
+artifact_location: file:///workspace/notebooks/mlruns/604912714123659266/models/m-7534a97715d5471d9b98cd69c5711e92/artifacts
+creation_timestamp: 1752615430543
+experiment_id: '604912714123659266'
+last_updated_timestamp: 1752615430543
+lifecycle_stage: active
+model_id: m-7534a97715d5471d9b98cd69c5711e92
+model_type: null
+name: random_forest_tuned_model
+source_run_id: e2316471a7174e69ae7b582d00f9e645
+status: 1
+status_message: null

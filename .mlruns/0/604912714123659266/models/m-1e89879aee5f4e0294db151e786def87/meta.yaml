@@ -1,0 +1,10 @@
+artifact_location: file:///workspace/notebooks/mlruns/604912714123659266/models/m-1e89879aee5f4e0294db151e786def87/artifacts
+creation_timestamp: 1752673468854
+experiment_id: '604912714123659266'
+last_updated_timestamp: 1752673471920
+model_id: m-1e89879aee5f4e0294db151e786def87
+model_type: null
+name: random_forest_tuned_model_supervised
+source_run_id: 76058a52bab54bc69cace83579fb7609
+status: 2
+status_message: null

@@ -43,6 +43,8 @@ services:
     depends_on:
       - postgres_mlflow
       - minio
+    volumes:
+      - ./mlruns:/mlflow/mlruns   # Persistência dos runs
     command:
       - mlflow
       - server

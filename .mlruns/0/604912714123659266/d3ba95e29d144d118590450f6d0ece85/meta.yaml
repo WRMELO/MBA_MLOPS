@@ -1,0 +1,14 @@
+artifact_uri: file:///workspace/notebooks/mlruns/604912714123659266/d3ba95e29d144d118590450f6d0ece85/artifacts
+end_time: 1752614501214
+entry_point_name: ''
+experiment_id: '604912714123659266'
+lifecycle_stage: active
+run_id: d3ba95e29d144d118590450f6d0ece85
+run_name: xgboost_split_v1.1_curated
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1752614499882
+status: 3
+tags: []
+user_id: root

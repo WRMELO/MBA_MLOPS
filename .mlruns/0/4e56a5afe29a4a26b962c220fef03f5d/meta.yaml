@@ -1,0 +1,14 @@
+artifact_uri: file:///workspace/notebooks/mlruns/0/4e56a5afe29a4a26b962c220fef03f5d/artifacts
+end_time: 1752677569117
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 4e56a5afe29a4a26b962c220fef03f5d
+run_name: random_forest_gridsearch_refit_v1.1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1752677567144
+status: 3
+tags: []
+user_id: root
