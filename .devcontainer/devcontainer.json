@@ -11,5 +11,6 @@
         "ms-toolsai.jupyter",
         "ms-azuretools.vscode-docker"
     ],
-    "remoteUser": "vscode"
+    "remoteUser": "vscode",
+    "forwardPorts": [8000]
 }
