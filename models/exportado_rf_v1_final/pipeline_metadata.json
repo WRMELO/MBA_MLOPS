@@ -1,0 +1,7 @@
+{
+    "run_id": "7077ebfbf696487384bd5a59034170c5",
+    "version_id": "v1-final",
+    "source_uri": "runs:/7077ebfbf696487384bd5a59034170c5/model",
+    "export_path": "/workspace/models/exportado_rf_v1_final/pipeline",
+    "load_command": "mlflow.pyfunc.load_model('/workspace/models/exportado_rf_v1_final/pipeline')"
+}

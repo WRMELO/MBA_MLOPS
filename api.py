@@ -1,58 +1,38 @@
-# ETAPA: API FastAPI USANDO PIPELINE COMPLETO FINAL
+# api.py
 
-from fastapi import FastAPI, HTTPException, Request, Header
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
-from slowapi.errors import RateLimitExceeded
+from typing import List, Dict, Any
 import pandas as pd
-import joblib
-import traceback
-import os
+import mlflow.pyfunc
+import uvicorn
+from datetime import datetime
 
-# 1️⃣ Configuração geral da API
-app = FastAPI(title="API Score de Crédito — QuantumFinance")
-limiter = Limiter(key_func=get_remote_address)
-app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-
-# 2️⃣ Segurança
-API_KEY = os.getenv("API_KEY", "quantum123")  # Use variável protegida em produção
-
-# 3️⃣ Caminho do pipeline final completo
-pipeline_path = "/workspace/models/final_pipeline_completo.pkl"
-
-# 4️⃣ Carregamento do pipeline completo
+# 1. Carrega modelo
+model_path = "/workspace/models/exportado_rf_v1_final/pipeline"
 try:
-    pipeline = joblib.load(pipeline_path)
+    model = mlflow.pyfunc.load_model(model_path)
 except Exception as e:
-    raise RuntimeError(f"Erro ao carregar pipeline: {e}")
+    raise RuntimeError(f"Erro ao carregar o modelo em {model_path}") from e
 
-# 5️⃣ Esquema de entrada
-class InputData(BaseModel):
-    data: dict
+# 2. Define estrutura do input
+class Item(BaseModel):
+    data: List[Dict[str, Any]]  # espera uma lista de dicionários (X em JSON)
 
-# 6️⃣ Endpoint de predição com validações
+# 3. Instancia API
+app = FastAPI(title="API de Inferência - Random Forest v1-final")
+
+# 4. Endpoint de predição
 @app.post("/predict")
-@limiter.limit("5/minute")
-async def predict(request: Request, input_data: InputData, x_api_key: str = Header(...)):
-    if x_api_key != API_KEY:
-        raise HTTPException(status_code=401, detail="Chave de API inválida.")
-
+def predict(item: Item):
     try:
-        # Converte entrada para DataFrame
-        df = pd.DataFrame([input_data.data])
-
-        # Substituição preventiva de placeholders
-        df.replace(['_______', '__ __ ____', '!@9#%8'], 'Unknown', inplace=True)
-
-        # Predição direta via pipeline completo
-        prediction = pipeline.predict(df)[0]
-        return {"prediction": prediction}
-
+        X = pd.DataFrame(item.data)
+        y_pred = model.predict(X)
+        return {
+            "timestamp": datetime.now().isoformat(),
+            "status": "ok",
+            "predictions": y_pred.tolist(),
+            "num_rows": len(X)
+        }
     except Exception as e:
-        erro_traceback = traceback.format_exc()
-        raise HTTPException(status_code=500, detail=f"Erro interno: {str(e)}\n{erro_traceback}")
-
-
+        raise HTTPException(status_code=500, detail=str(e))

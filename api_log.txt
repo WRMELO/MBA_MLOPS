@@ -1,6 +1,5 @@
-INFO:     Started server process [402501]
+INFO:     Started server process [104364]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     127.0.0.1:43174 - "POST /predict HTTP/1.1" 500 Internal Server Error
-INFO:     127.0.0.1:39246 - "POST /predict HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:46720 - "POST /predict HTTP/1.1" 500 Internal Server Error

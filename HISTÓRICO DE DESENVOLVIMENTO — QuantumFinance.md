@@ -369,8 +369,37 @@ A partir deste ponto, todo o desenvolvimento será **refeito a partir do noteboo
     4. Incluir bloco de verificação de `.signature` e `.input_example` no experimento antes da exportação final.
         
 
-📌 **Próximo passo:** Realizar o salvamento completo do pipeline com MLflow incluindo o encoder treinado, assegurando que os dados de entrada na API correspondam exatamente aos esperados no `predict()`.
+### ✅ 2025-07-23 — Etapas 2, 3 e 4 reexecutadas e modelo congelado oficialmente como versão `v1-final`
 
----
+Após a detecção de inconsistências técnicas nos registros anteriores (run_id `79e0f222...` e `aea76868...`), foi refeito todo o processo de modelagem, validação e registro para garantir integridade completa e conformidade com o PROTOCOLO V5.5.
 
-Confirme se deseja que eu adicione esse bloco diretamente ao Markdown `HISTÓRICO DE DESENVOLVIMENTO — QuantumFinance.md` ou deseja fazer isso manualmente. Deseja o `.md` atualizado para download?
+#### Etapa 2 (Reexecutada)
+
+- O modelo Random Forest foi treinado diretamente com os melhores hiperparâmetros já conhecidos, sem GridSearch adicional:
+  - `max_depth = 20`
+  - `max_features = 'sqrt'`
+  - `min_samples_leaf = 3`
+  - `n_estimators = 200`
+- O pipeline foi construído com `OrdinalEncoder` acoplado e serializado integralmente via `mlflow.sklearn.log_model(...)`;
+- Foi salvo com `input_example` coerente, forçado para `object`, garantindo integridade de tipos;
+- O run final foi salvo sob:
+  - `run_id = 7077ebfbf696487384bd5a59034170c5`
+  - `experimento = modelo_rf_otimizado_final`
+
+#### Etapa 3 (Validação Completa)
+
+- O modelo foi carregado via `pyfunc.load_model()` e testado com `X_test` real;
+- A inferência foi realizada com sucesso, sem erros de shape ou tipo;
+- A `signature` foi recuperada e validada estruturalmente contra as colunas reais;
+- O `input_example.json` original, embora corrompido para leitura via Pandas, foi substituído por uma exportação rastreável:
+  - `input_example_rf_v1.csv` salvo em `/workspace/data/examples/`
+  - Estrutura auditável e versionável, compatível com API REST, documentação externa e deploys automatizados.
+
+#### Etapa 4 (Congelamento Oficial)
+
+- O modelo foi oficialmente promovido à versão `v1-final`;
+- Foi gerado e salvo o manifesto JSON contendo os metadados da versão congelada:
+  - Local: `/workspace/models/congelados/manifesto_modelo_rf_v1.json`
+- Este modelo é agora a base canônica para as etapas seguintes: exportação de pipeline, deploy da API FastAPI e interface via Streamlit.
+
+📌 A partir deste ponto, qualquer nova alteração deve ser registrada como nova versão (`v2`, `v3`, etc.), mantendo o `v1-final` imutável para rastreabilidade de produção.
