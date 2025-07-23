@@ -1,0 +1,14 @@
+artifact_uri: file:///workspace/.mlruns/770693764546068990/7077ebfbf696487384bd5a59034170c5/artifacts
+end_time: 1753261919486
+entry_point_name: ''
+experiment_id: '770693764546068990'
+lifecycle_stage: active
+run_id: 7077ebfbf696487384bd5a59034170c5
+run_name: modelo_rf_final_integrado
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1753261917821
+status: 3
+tags: []
+user_id: root
