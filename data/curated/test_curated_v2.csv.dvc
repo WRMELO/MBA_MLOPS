@@ -1,0 +1,5 @@
+outs:
+- md5: 55169162c14aeb9eebdb45501e901165
+  size: 32064201
+  hash: md5
+  path: test_curated_v2.csv

@@ -1,0 +1,5 @@
+outs:
+- md5: 78b5d6246fed22099ec78b0972ee1d0a
+  size: 53125065
+  hash: md5
+  path: train_curated_v2.csv
