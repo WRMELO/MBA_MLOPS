@@ -1,0 +1,19 @@
+{
+    "version_id": "v1-final",
+    "run_id": "7077ebfbf696487384bd5a59034170c5",
+    "experiment": "modelo_rf_otimizado_final",
+    "model_name": "RandomForestClassifier",
+    "params": {
+        "max_depth": 20,
+        "max_features": "sqrt",
+        "min_samples_leaf": 3,
+        "n_estimators": 200
+    },
+    "input_example_path": "/workspace/data/examples/input_example_rf_v1.csv",
+    "signature_status": "valida",
+    "inference_tested_with_X_test": true,
+    "registered_by": "pipeline_mlflow_etapa4",
+    "ready_for_api": true,
+    "ready_for_streamlit": true,
+    "timestamp": "2025-07-23T09:16:37.594712"
+}
