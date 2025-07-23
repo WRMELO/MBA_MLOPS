@@ -1,0 +1,114 @@
+artifact_path: file:///workspace/.mlruns/687703056577003543/models/m-f23758a8bce944d6b8c99db6bc56f0bc/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.10.18
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.0
+is_signature_from_type_hint: false
+mlflow_version: 3.1.1
+model_id: m-f23758a8bce944d6b8c99db6bc56f0bc
+model_size_bytes: 288371738
+model_uuid: m-f23758a8bce944d6b8c99db6bc56f0bc
+prompts: null
+run_id: 79e0f222d87c4049b48f0205ac73877a
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "double", "name": "Age", "required": true}, {"type": "string",
+    "name": "Age_Binned", "required": true}, {"type": "double", "name": "Amount_invested_monthly",
+    "required": true}, {"type": "string", "name": "Amount_invested_monthly_Binned",
+    "required": true}, {"type": "boolean", "name": "Amount_invested_monthly_Binned_High",
+    "required": true}, {"type": "boolean", "name": "Amount_invested_monthly_Binned_Low",
+    "required": true}, {"type": "boolean", "name": "Amount_invested_monthly_Binned_Moderate",
+    "required": true}, {"type": "double", "name": "Annual_Income", "required": true},
+    {"type": "string", "name": "Annual_Income_Binned", "required": true}, {"type":
+    "double", "name": "Changed_Credit_Limit", "required": true}, {"type": "string",
+    "name": "Changed_Credit_Limit_Binned", "required": true}, {"type": "string", "name":
+    "Credit_History_Age", "required": false}, {"type": "string", "name": "Credit_History_Age_Binned",
+    "required": false}, {"type": "double", "name": "Credit_History_Age_Months", "required":
+    false}, {"type": "string", "name": "Credit_Mix", "required": true}, {"type": "double",
+    "name": "Credit_Utilization_Ratio", "required": true}, {"type": "string", "name":
+    "Credit_Utilization_Ratio_Binned", "required": true}, {"type": "boolean", "name":
+    "Credit_Utilization_Ratio_Binned_High", "required": true}, {"type": "boolean",
+    "name": "Credit_Utilization_Ratio_Binned_Low", "required": true}, {"type": "boolean",
+    "name": "Credit_Utilization_Ratio_Binned_Moderate", "required": true}, {"type":
+    "long", "name": "Delay_from_due_date", "required": true}, {"type": "string", "name":
+    "Delay_from_due_date_Binned", "required": true}, {"type": "long", "name": "Interest_Rate",
+    "required": true}, {"type": "string", "name": "Interest_Rate_Binned", "required":
+    true}, {"type": "boolean", "name": "Month_August", "required": true}, {"type":
+    "boolean", "name": "Month_February", "required": true}, {"type": "boolean", "name":
+    "Month_January", "required": true}, {"type": "boolean", "name": "Month_July",
+    "required": true}, {"type": "boolean", "name": "Month_June", "required": true},
+    {"type": "boolean", "name": "Month_March", "required": true}, {"type": "boolean",
+    "name": "Month_May", "required": true}, {"type": "long", "name": "Month_November",
+    "required": true}, {"type": "long", "name": "Month_October", "required": true},
+    {"type": "long", "name": "Month_September", "required": true}, {"type": "double",
+    "name": "Monthly_Balance", "required": true}, {"type": "string", "name": "Monthly_Balance_Binned",
+    "required": true}, {"type": "boolean", "name": "Monthly_Balance_Binned_High",
+    "required": true}, {"type": "boolean", "name": "Monthly_Balance_Binned_Low", "required":
+    true}, {"type": "boolean", "name": "Monthly_Balance_Binned_Moderate", "required":
+    true}, {"type": "double", "name": "Monthly_Inhand_Salary", "required": true},
+    {"type": "string", "name": "Monthly_Inhand_Salary_Binned", "required": true},
+    {"type": "long", "name": "Num_Bank_Accounts", "required": true}, {"type": "string",
+    "name": "Num_Bank_Accounts_Binned", "required": true}, {"type": "long", "name":
+    "Num_Credit_Card", "required": true}, {"type": "string", "name": "Num_Credit_Card_Binned",
+    "required": true}, {"type": "double", "name": "Num_Credit_Inquiries", "required":
+    false}, {"type": "string", "name": "Num_Credit_Inquiries_Binned", "required":
+    false}, {"type": "double", "name": "Num_of_Delayed_Payment", "required": true},
+    {"type": "string", "name": "Num_of_Delayed_Payment_Binned", "required": true},
+    {"type": "double", "name": "Num_of_Loan", "required": true}, {"type": "string",
+    "name": "Num_of_Loan_Binned", "required": true}, {"type": "string", "name": "Occupation",
+    "required": true}, {"type": "boolean", "name": "Occupation_Group_Architect", "required":
+    true}, {"type": "boolean", "name": "Occupation_Group_Developer", "required": true},
+    {"type": "boolean", "name": "Occupation_Group_Doctor", "required": true}, {"type":
+    "boolean", "name": "Occupation_Group_Engineer", "required": true}, {"type": "boolean",
+    "name": "Occupation_Group_Entrepreneur", "required": true}, {"type": "boolean",
+    "name": "Occupation_Group_Journalist", "required": true}, {"type": "boolean",
+    "name": "Occupation_Group_Lawyer", "required": true}, {"type": "boolean", "name":
+    "Occupation_Group_Manager", "required": true}, {"type": "boolean", "name": "Occupation_Group_Mechanic",
+    "required": true}, {"type": "boolean", "name": "Occupation_Group_Media_Manager",
+    "required": true}, {"type": "boolean", "name": "Occupation_Group_Musician", "required":
+    true}, {"type": "boolean", "name": "Occupation_Group_Other", "required": true},
+    {"type": "boolean", "name": "Occupation_Group_Scientist", "required": true}, {"type":
+    "boolean", "name": "Occupation_Group_Teacher", "required": true}, {"type": "boolean",
+    "name": "Occupation_Group_Writer", "required": true}, {"type": "double", "name":
+    "Outstanding_Debt", "required": true}, {"type": "string", "name": "Outstanding_Debt_Binned",
+    "required": true}, {"type": "boolean", "name": "Outstanding_Debt_Binned_High",
+    "required": true}, {"type": "boolean", "name": "Outstanding_Debt_Binned_Low",
+    "required": true}, {"type": "boolean", "name": "Outstanding_Debt_Binned_Moderate",
+    "required": true}, {"type": "boolean", "name": "Outstanding_Debt_Binned_Very High",
+    "required": true}, {"type": "boolean", "name": "Payment_Behaviour_High_spent_Medium_value_payments",
+    "required": true}, {"type": "boolean", "name": "Payment_Behaviour_High_spent_Small_value_payments",
+    "required": true}, {"type": "boolean", "name": "Payment_Behaviour_Low_spent_Large_value_payments",
+    "required": true}, {"type": "boolean", "name": "Payment_Behaviour_Low_spent_Medium_value_payments",
+    "required": true}, {"type": "boolean", "name": "Payment_Behaviour_Low_spent_Small_value_payments",
+    "required": true}, {"type": "boolean", "name": "Payment_Behaviour_Other", "required":
+    true}, {"type": "string", "name": "Payment_of_Min_Amount", "required": true},
+    {"type": "double", "name": "Total_EMI_per_month", "required": true}, {"type":
+    "string", "name": "Total_EMI_per_month_Binned", "required": true}, {"type": "string",
+    "name": "Type_of_Loan", "required": false}, {"type": "boolean", "name": "Type_of_Loan_Category_Auto
+    Loan", "required": true}, {"type": "boolean", "name": "Type_of_Loan_Category_Credit-Builder
+    Loan", "required": true}, {"type": "boolean", "name": "Type_of_Loan_Category_Debt
+    Consolidation Loan", "required": true}, {"type": "boolean", "name": "Type_of_Loan_Category_Home
+    Equity Loan", "required": true}, {"type": "boolean", "name": "Type_of_Loan_Category_Mortgage
+    Loan", "required": true}, {"type": "boolean", "name": "Type_of_Loan_Category_Not
+    Specified", "required": true}, {"type": "boolean", "name": "Type_of_Loan_Category_Payday
+    Loan", "required": true}, {"type": "boolean", "name": "Type_of_Loan_Category_Personal
+    Loan", "required": true}, {"type": "boolean", "name": "Type_of_Loan_Category_Student
+    Loan", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "object", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-07-23 08:25:51.331803'

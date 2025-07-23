@@ -1,0 +1,6 @@
+artifact_location: file:///workspace/.mlruns/285161030741879625
+creation_time: 1753258507331
+experiment_id: '285161030741879625'
+last_update_time: 1753258507331
+lifecycle_stage: active
+name: modelo_rf_finalizado

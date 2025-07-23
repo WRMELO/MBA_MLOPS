@@ -218,23 +218,9 @@ Desenvolvido e atualizado pelo Obsidian
 - **Bloco de `dvc add` executado**, mas resultou em erro de `dubious ownership` no Git (`exit status 128`) ao tentar adicionar o `.dvc`.
 - **Motivo do erro:** Git recusou-se a operar dentro do diretório `/workspace` por não considerá-lo seguro, conforme política de segurança interna.
 - **Solução registrada e aplicada:** inserido comando:
-  
-  ```bash
+
   git config --global --add safe.directory /workspace
-
-
-### ✅ [PLACEHOLDER] Próximas entradas
-
-- _Exemplo: Configuração do `dvc remote` com backend MinIO finalizada._
-- _Exemplo: Registro do primeiro experimento no MLflow._
-- _Exemplo: Deploy do FastAPI em ambiente de homologação._
-
-
-## 🔒 Observações
-
-- Este histórico faz parte das **boas práticas de rastreabilidade MLOps**, complementando o versionamento do Git.
-- Mantém contexto de decisões para revisões, auditorias ou reuso futuro.
-
+---
 
 ### ❌ 2025-07-22 — Falha Crítica de Persistência para Consumo pela API (Erro #2025-07-22-014)
 
@@ -266,3 +252,125 @@ Desenvolvido e atualizado pelo Obsidian
   - Parâmetros, métrica e artefato registrados com sucesso.
 
 📌 Pronto para inferência via `api.py` com artefatos rastreáveis e performance validada.
+
+
+---
+
+### ❌ 2025-07-23 — Falha crítica no consumo da API e reinício do desenvolvimento
+
+- **Problema identificado:** Durante a tentativa de consumo do modelo via interface `Streamlit`, foi gerado erro do tipo `ValueError: columns are missing`, indicando que os dados enviados não eram compatíveis com o pipeline de predição salvo.
+    
+- **Causa raiz:** O pipeline treinado com `OrdinalEncoder` e `KBinsDiscretizer` foi construído sobre um subconjunto reduzido das colunas reais do `curated_v1_1`, mas a aplicação `Streamlit` preparava os dados com um conjunto muito maior de colunas (inclusive as já transformadas, como `Occupation_Group_*`, `*_Binned_*`, etc.).
+    
+- **Impacto:** A tentativa de inferência gera um `diff` entre as colunas esperadas pelo pipeline salvo e as fornecidas pelo formulário JSON da API, causando exceção em tempo de execução.
+    
+- **Gravidade:** ALTA — impossibilita o deploy da aplicação, mesmo com modelo funcional e encoder salvo.
+    
+- **Tentativas de correção realizadas:**
+    
+    - Verificação do pipeline `pipeline_completo.pkl` com `.named_steps['preprocessor']` para mapear as colunas esperadas.
+        
+    - Teste local de inferência manual com os mesmos dados — erro persistiu.
+        
+    - Print do erro completo via interface Streamlit confirmou **incompatibilidade estrutural entre `X` esperado e `X` enviado**.
+        
+- **Decisão final:**
+    
+    1. **Arquivar o pipeline atual como falho para consumo em produção.**
+        
+    2. **Reiniciar todo o desenvolvimento, do zero, agora de forma completa, integrando os seguintes pontos desde o início:**
+        
+        - Pré-processamento único e rastreável;
+            
+        - Encoding supervisionado com controle de cardinalidade;
+            
+        - Persistência acoplada ao pipeline (`joblib`) com schema fixo;
+            
+        - Compatibilidade garantida com API externa (`FastAPI`, `Streamlit`, etc.);
+            
+        - Teste de inferência ao final do fitting para validar shape e ordem das colunas.
+            
+
+
+
+---
+
+### 🔁 2025-07-23 — Decisão de refazer o notebook `runs_desenvolvimento` com MLflow pleno
+
+- **Problema identificado:** A tentativa de integração entre o pipeline treinado (`pipeline_completo.pkl`) e a interface de consumo via API (FastAPI + Streamlit) falhou por inconsistência estrutural entre os dados esperados pelo modelo e os dados enviados pela aplicação.
+    
+- **Evidência:** Erro do tipo `ValueError: columns are missing` foi registrado, evidenciando descompasso entre o vetor de entrada gerado pelo frontend e o que o pipeline espera após transformação (`OrdinalEncoder` + `KBinsDiscretizer`).
+    
+- **Causa raiz:** O pipeline foi construído e salvo separadamente, sem garantir consistência plena com o fluxo de ingestão e serialização usado no momento da predição. O ciclo de ML não estava fechado corretamente.
+    
+- **Impacto:** A aplicação completa (modelo + API + UI) tornou-se não funcional, inviabilizando o deploy e os testes de inferência em produção.
+    
+
+#### ✅ Decisão estratégica
+
+A partir deste ponto, todo o desenvolvimento será **refeito a partir do notebook `runs_desenvolvimento.ipynb`**, com as seguintes diretrizes fixas:
+
+1. **Utilização plena do MLflow desde o início do ciclo**, incluindo:
+    
+    - Registro de modelos com hiperparâmetros, métricas e artefatos;
+        
+    - Salvamento versionado com `run_id` rastreável;
+        
+    - Log estruturado de pipelines e transformações;
+        
+    - Validação completa do modelo com `signature` e `input_example`.
+        
+2. **Eliminação de serializações manuais (`joblib.dump`) avulsas**, substituindo por persistência estruturada via MLflow.
+    
+3. **Reformulação do ciclo de experimentação**, com:
+    
+    - Separação clara entre etapas de pré-processamento, treino, avaliação e exportação;
+        
+    - Conformidade entre os dados de treino e os dados esperados no deploy;
+        
+    - Versionamento automático e rastreável de cada execução.
+        
+
+📌 Esta redefinição é mandatória e segue o **PROTOCOLO V5.4**, encerrando oficialmente a fase anterior de prototipação e iniciando a etapa de **desenvolvimento consolidado e pronto para produção**.
+
+
+---
+
+### 🔎 2025-07-23 — Discussão sobre persistência do pipeline e rastreabilidade com MLflow
+
+- **Contexto atual:** Após a etapa de treinamento e tuning com `GridSearchCV` usando `RandomForestClassifier`, obteve-se desempenho superior ao baseline (Acurácia **0.7770**, F1 Macro **0.7611**), registrado e rastreado via MLflow.
+    
+- **Discussão técnica em andamento:**
+    
+    - Debate sobre **momento correto para persistência** do pipeline final.
+        
+    - Avaliação se o encoder (`OrdinalEncoder`, `KBinsDiscretizer`) está sendo salvo **dentro do pipeline** rastreado, ou se é necessário salvar como artefato adicional.
+        
+    - Verificação se o pipeline final (`sklearn.pipeline.Pipeline`) inclui todas as etapas de transformação necessárias para consumo direto na API.
+        
+    - Conclusão parcial: embora o modelo esteja sendo corretamente salvo com `mlflow.sklearn.log_model(...)`, é necessário garantir que:
+        
+        - O **schema do input (`signature`)** seja registrado corretamente;
+            
+        - O **`input_example`** reflita a estrutura real de predição (com colunas transformadas);
+            
+        - As etapas de transformação estejam acopladas ao `Pipeline` para **evitar perda de contexto na inferência**.
+            
+- **Risco identificado:** Se o pipeline final não estiver completo (com encoder embutido), **a API falhará novamente** como no ciclo anterior.
+    
+- **Ação determinada:**
+    
+    1. Garantir que o pipeline final contenha o encoder treinado e seja **único artefato serializado**;
+        
+    2. **Evitar múltiplos `.pkl` avulsos**, preferindo a serialização única do `Pipeline` completo via MLflow;
+        
+    3. Confirmar a compatibilidade do modelo via `mlflow.pyfunc.load_model()` e teste manual de inferência antes do deploy;
+        
+    4. Incluir bloco de verificação de `.signature` e `.input_example` no experimento antes da exportação final.
+        
+
+📌 **Próximo passo:** Realizar o salvamento completo do pipeline com MLflow incluindo o encoder treinado, assegurando que os dados de entrada na API correspondam exatamente aos esperados no `predict()`.
+
+---
+
+Confirme se deseja que eu adicione esse bloco diretamente ao Markdown `HISTÓRICO DE DESENVOLVIMENTO — QuantumFinance.md` ou deseja fazer isso manualmente. Deseja o `.md` atualizado para download?

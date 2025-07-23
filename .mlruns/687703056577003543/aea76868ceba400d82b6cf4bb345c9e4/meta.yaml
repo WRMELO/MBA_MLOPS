@@ -1,0 +1,14 @@
+artifact_uri: file:///workspace/.mlruns/687703056577003543/aea76868ceba400d82b6cf4bb345c9e4/artifacts
+end_time: 1753261065261
+entry_point_name: ''
+experiment_id: '687703056577003543'
+lifecycle_stage: active
+run_id: aea76868ceba400d82b6cf4bb345c9e4
+run_name: rf_gridsearch_corrigido
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1753260979559
+status: 3
+tags: []
+user_id: root

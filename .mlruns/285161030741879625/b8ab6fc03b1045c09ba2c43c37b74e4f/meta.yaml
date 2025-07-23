@@ -1,0 +1,14 @@
+artifact_uri: file:///workspace/.mlruns/285161030741879625/b8ab6fc03b1045c09ba2c43c37b74e4f/artifacts
+end_time: 1753258522123
+entry_point_name: ''
+experiment_id: '285161030741879625'
+lifecycle_stage: active
+run_id: b8ab6fc03b1045c09ba2c43c37b74e4f
+run_name: rf_pipeline_integrado
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1753258507356
+status: 3
+tags: []
+user_id: root
