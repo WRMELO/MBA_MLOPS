@@ -1,126 +1,6 @@
-Downloading artifacts:   0%|          | 0/1 [00:00<?, ?it/s]Downloading artifacts:   0%|          | 0/1 [00:00<?, ?it/s]
-Downloading artifacts:   0%|          | 0/5 [00:00<?, ?it/s]Downloading artifacts:  20%|██        | 1/5 [00:00<00:00, 43240.25it/s]Downloading artifacts:  40%|████      | 2/5 [00:00<00:00, 2999.14it/s] Downloading artifacts:  60%|██████    | 3/5 [00:00<00:00, 2729.48it/s]Downloading artifacts:  80%|████████  | 4/5 [00:00<00:00, 3394.82it/s]Downloading artifacts: 100%|██████████| 5/5 [00:00<00:00, 34.78it/s]  Downloading artifacts: 100%|██████████| 5/5 [00:00<00:00, 34.78it/s]Downloading artifacts: 100%|██████████| 5/5 [00:00<00:00, 34.74it/s]
-INFO:     Started server process [211221]
+INFO:     Started server process [402501]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     127.0.0.1:50428 - "POST /predict HTTP/1.1" 500 Internal Server Error
-ERROR:    Exception in ASGI application
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
-    result = await app(  # type: ignore[func-returns-value]
-  File "/usr/local/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
-    return await self.app(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/fastapi/applications.py", line 1054, in __call__
-    await super().__call__(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/applications.py", line 113, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
-    await self.app(scope, receive, _send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/middleware/cors.py", line 85, in __call__
-    await self.app(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
-    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-    await app(scope, receive, sender)
-  File "/usr/local/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
-    await route.handle(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
-    await self.app(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/routing.py", line 78, in app
-    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-    await app(scope, receive, sender)
-  File "/usr/local/lib/python3.10/site-packages/starlette/routing.py", line 75, in app
-    response = await f(request)
-  File "/usr/local/lib/python3.10/site-packages/fastapi/routing.py", line 302, in app
-    raw_response = await run_endpoint_function(
-  File "/usr/local/lib/python3.10/site-packages/fastapi/routing.py", line 215, in run_endpoint_function
-    return await run_in_threadpool(dependant.call, **values)
-  File "/usr/local/lib/python3.10/site-packages/starlette/concurrency.py", line 38, in run_in_threadpool
-    return await anyio.to_thread.run_sync(func)
-  File "/usr/local/lib/python3.10/site-packages/anyio/to_thread.py", line 56, in run_sync
-    return await get_async_backend().run_sync_in_worker_thread(
-  File "/usr/local/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 2470, in run_sync_in_worker_thread
-    return await future
-  File "/usr/local/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 967, in run
-    result = context.run(func, *args)
-  File "/workspace/api.py", line 85, in predict
-    input_df[object_cols] = encoder.transform(input_df[object_cols])
-  File "/usr/local/lib/python3.10/site-packages/sklearn/utils/_set_output.py", line 316, in wrapped
-    data_to_wrap = f(self, X, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/preprocessing/_encoders.py", line 1597, in transform
-    X_int, X_mask = self._transform(
-  File "/usr/local/lib/python3.10/site-packages/sklearn/preprocessing/_encoders.py", line 210, in _transform
-    diff, valid_mask = _check_unknown(Xi, self.categories_[i], return_mask=True)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/utils/_encode.py", line 313, in _check_unknown
-    if xp.any(xp.isnan(known_values)):
-TypeError: ufunc 'isnan' not supported for the input types, and the inputs could not be safely coerced to any supported types according to the casting rule ''safe''
-INFO:     127.0.0.1:57850 - "POST /predict HTTP/1.1" 500 Internal Server Error
-ERROR:    Exception in ASGI application
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
-    result = await app(  # type: ignore[func-returns-value]
-  File "/usr/local/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
-    return await self.app(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/fastapi/applications.py", line 1054, in __call__
-    await super().__call__(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/applications.py", line 113, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
-    await self.app(scope, receive, _send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/middleware/cors.py", line 85, in __call__
-    await self.app(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
-    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-    await app(scope, receive, sender)
-  File "/usr/local/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
-    await route.handle(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
-    await self.app(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/routing.py", line 78, in app
-    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-  File "/usr/local/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-    await app(scope, receive, sender)
-  File "/usr/local/lib/python3.10/site-packages/starlette/routing.py", line 75, in app
-    response = await f(request)
-  File "/usr/local/lib/python3.10/site-packages/fastapi/routing.py", line 302, in app
-    raw_response = await run_endpoint_function(
-  File "/usr/local/lib/python3.10/site-packages/fastapi/routing.py", line 215, in run_endpoint_function
-    return await run_in_threadpool(dependant.call, **values)
-  File "/usr/local/lib/python3.10/site-packages/starlette/concurrency.py", line 38, in run_in_threadpool
-    return await anyio.to_thread.run_sync(func)
-  File "/usr/local/lib/python3.10/site-packages/anyio/to_thread.py", line 56, in run_sync
-    return await get_async_backend().run_sync_in_worker_thread(
-  File "/usr/local/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 2470, in run_sync_in_worker_thread
-    return await future
-  File "/usr/local/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 967, in run
-    result = context.run(func, *args)
-  File "/workspace/api.py", line 85, in predict
-    input_df[object_cols] = encoder.transform(input_df[object_cols])
-  File "/usr/local/lib/python3.10/site-packages/sklearn/utils/_set_output.py", line 316, in wrapped
-    data_to_wrap = f(self, X, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/preprocessing/_encoders.py", line 1597, in transform
-    X_int, X_mask = self._transform(
-  File "/usr/local/lib/python3.10/site-packages/sklearn/preprocessing/_encoders.py", line 210, in _transform
-    diff, valid_mask = _check_unknown(Xi, self.categories_[i], return_mask=True)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/utils/_encode.py", line 313, in _check_unknown
-    if xp.any(xp.isnan(known_values)):
-TypeError: ufunc 'isnan' not supported for the input types, and the inputs could not be safely coerced to any supported types according to the casting rule ''safe''
+INFO:     127.0.0.1:43174 - "POST /predict HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:39246 - "POST /predict HTTP/1.1" 500 Internal Server Error
