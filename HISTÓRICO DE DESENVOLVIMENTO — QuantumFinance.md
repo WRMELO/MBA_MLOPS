@@ -452,3 +452,56 @@ Com o congelamento oficial do modelo `v1-final`, iniciou-se a etapa de exportaç
 - Os erros foram solucionados com reconstrução baseada no pipeline real;
 - Foram bloqueadas heurísticas de inferência automática de tipos ou nomes, passando-se a exigir input gerado diretamente pelo pipeline e versão oficial.
 
+### ✅ 2025-07-24 — Reestruturação completa do pipeline para compatibilidade com API + Streamlit
+
+Após a confirmação do modelo `v1-final` com rastreabilidade completa via MLflow, iniciou-se a integração com o frontend Streamlit. O objetivo era fornecer uma interface amigável com **21 campos interpretáveis por humanos**, os quais seriam convertidos internamente para os **92 atributos numéricos esperados pelo modelo treinado**.
+
+#### ❌ Problema técnico detectado na etapa de consumo:
+
+- A aplicação Streamlit não estava alinhada ao schema do modelo.
+- O payload gerado manualmente pela interface violava as expectativas da `signature` do MLflow, principalmente em:
+  - **Tipos incompatíveis** (`bool` em vez de `int64`);
+  - **Colunas extras** ou transformadas (`Age_Binned_*`, etc.);
+  - **Diferenças na ordem e nomes exatos**.
+
+#### 🧩 Diagnóstico aprofundado:
+
+- O pipeline esperava colunas numéricas discretizadas (`Binned`) e codificadas com `OrdinalEncoder`.
+- A interface Streamlit, por outro lado, coletava valores brutos (ex: "25 anos", "Baixa Renda") sem aplicar o mesmo tratamento.
+- O problema original se repetia: **não havia um ponto central de transformação confiável** entre a entrada humana e o vetor de entrada da API.
+
+---
+
+#### ✅ Decisão estratégica: criação de novo fluxo com modularidade explícita
+
+- Dividiu-se a solução em três partes bem definidas:
+  1. `app_streamlit_humano.py` — Interface com 21 campos interpretáveis por humanos, com menus `st.selectbox`.
+  2. `cf_transform.py` — Módulo responsável por transformar os dados humanos nos **92 inputs numéricos** exigidos pelo modelo, baseado no `VARIABLE_MAP`.
+  3. `api_predicao_v1.py` — API FastAPI compatível com o modelo `v1-final`, já funcional com `POST /predict`.
+
+- O `VARIABLE_MAP` foi validado e confirmado como fonte de verdade para a transformação:
+  - Mapeia as 21 entradas para as 92 saídas com precisão;
+  - Permite derivar colunas ausentes com valores padrão ou combinatórios;
+  - Garante consistência com o input_example salvo via MLflow.
+
+#### 🧪 Testes e correções:
+
+- Pipeline testado com `curl` e com arquivos `.json` intermediários (`payload.json`);
+- Corrigidos erros de schema, especialmente em tipos (`int64` vs `bool`);
+- Validado o carregamento do modelo com `mlflow.pyfunc.load_model(...)` dentro da API;
+- Resultado correto entregue ao Streamlit, via `requests.post()`.
+
+---
+
+📌 **Status atual:**  
+- API FastAPI (`api_predicao_v1.py`) funcional e aceitando dados no formato `signature`;
+- Interface Streamlit (`app_streamlit_humano.py`) coletando os 21 campos e exibindo resposta;
+- Conversor (`cf_transform.py`) testado e integrado entre os dois;
+- Teste real executado via `curl`, recebendo `{"predictions": ["Standard"]}` corretamente.
+
+✅ O ciclo de ponta a ponta (UI ➝ conversor ➝ API ➝ modelo ➝ resposta) está **finalmente fechado, rastreável e funcional**.
+
+📌 Pronto para criação de testes unitários, refino do UI, logs de auditoria e deploy externo controlado.
+
+---
+
