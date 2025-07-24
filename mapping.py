@@ -1,1 +1,63 @@
-VARIABLE_MAP = {'Age': {'label': None, 'widget': None, 'api': None}, 'Age_Binned': {'label': 'Idade', 'widget': 'selectbox', 'api': 'Age_Binned'}, 'Amount_invested_monthly': {'label': None, 'widget': None, 'api': None}, 'Amount_invested_monthly_Binned': {'label': 'Investimento Mensal', 'widget': 'selectbox', 'api': 'Amount_invested_monthly_Binned'}, 'Amount_invested_monthly_Binned_High': {'label': None, 'widget': None, 'api': None}, 'Amount_invested_monthly_Binned_Low': {'label': None, 'widget': None, 'api': None}, 'Amount_invested_monthly_Binned_Moderate': {'label': None, 'widget': None, 'api': None}, 'Annual_Income': {'label': None, 'widget': None, 'api': None}, 'Annual_Income_Binned': {'label': 'Renda Anual', 'widget': 'selectbox', 'api': 'Annual_Income_Binned'}, 'Changed_Credit_Limit': {'label': None, 'widget': None, 'api': None}, 'Changed_Credit_Limit_Binned': {'label': 'Mudança de Limite', 'widget': 'selectbox', 'api': 'Changed_Credit_Limit_Binned'}, 'Credit_History_Age': {'label': 'Idade do Histórico de Crédito', 'widget': 'number_input', 'api': 'Credit_History_Age'}, 'Credit_History_Age_Binned': {'label': 'Histórico Binned', 'widget': 'selectbox', 'api': 'Credit_History_Age_Binned'}, 'Credit_History_Age_Months': {'label': None, 'widget': None, 'api': None}, 'Credit_Mix': {'label': 'Perfil de Crédito', 'widget': 'selectbox', 'api': 'Credit_Mix'}, 'Credit_Utilization_Ratio': {'label': None, 'widget': None, 'api': None}, 'Credit_Utilization_Ratio_Binned': {'label': 'Utilização de Crédito', 'widget': 'selectbox', 'api': 'Credit_Utilization_Ratio_Binned'}, 'Credit_Utilization_Ratio_Binned_High': {'label': None, 'widget': None, 'api': None}, 'Credit_Utilization_Ratio_Binned_Low': {'label': None, 'widget': None, 'api': None}, 'Credit_Utilization_Ratio_Binned_Moderate': {'label': None, 'widget': None, 'api': None}, 'Delay_from_due_date': {'label': None, 'widget': None, 'api': None}, 'Delay_from_due_date_Binned': {'label': 'Dias de Atraso', 'widget': 'selectbox', 'api': 'Delay_from_due_date_Binned'}, 'Interest_Rate': {'label': None, 'widget': None, 'api': None}, 'Interest_Rate_Binned': {'label': 'Taxa de Juros', 'widget': 'selectbox', 'api': 'Interest_Rate_Binned'}, 'Month_August': {'label': None, 'widget': None, 'api': None}, 'Month_February': {'label': None, 'widget': None, 'api': None}, 'Month_January': {'label': None, 'widget': None, 'api': None}, 'Month_July': {'label': None, 'widget': None, 'api': None}, 'Month_June': {'label': None, 'widget': None, 'api': None}, 'Month_March': {'label': None, 'widget': None, 'api': None}, 'Month_May': {'label': None, 'widget': None, 'api': None}, 'Month_November': {'label': None, 'widget': None, 'api': None}, 'Month_October': {'label': None, 'widget': None, 'api': None}, 'Month_September': {'label': None, 'widget': None, 'api': None}, 'Monthly_Balance': {'label': None, 'widget': None, 'api': None}, 'Monthly_Balance_Binned': {'label': 'Balanço Mensal', 'widget': 'selectbox', 'api': 'Monthly_Balance_Binned'}, 'Monthly_Balance_Binned_High': {'label': None, 'widget': None, 'api': None}, 'Monthly_Balance_Binned_Low': {'label': None, 'widget': None, 'api': None}, 'Monthly_Balance_Binned_Moderate': {'label': None, 'widget': None, 'api': None}, 'Monthly_Inhand_Salary': {'label': None, 'widget': None, 'api': None}, 'Monthly_Inhand_Salary_Binned': {'label': 'Salário Mensal', 'widget': 'selectbox', 'api': 'Monthly_Inhand_Salary_Binned'}, 'Num_Bank_Accounts': {'label': None, 'widget': None, 'api': None}, 'Num_Bank_Accounts_Binned': {'label': 'Nº de Contas Bancárias', 'widget': 'selectbox', 'api': 'Num_Bank_Accounts_Binned'}, 'Num_Credit_Card': {'label': None, 'widget': None, 'api': None}, 'Num_Credit_Card_Binned': {'label': 'Nº de Cartões', 'widget': 'selectbox', 'api': 'Num_Credit_Card_Binned'}, 'Num_Credit_Inquiries': {'label': None, 'widget': None, 'api': None}, 'Num_Credit_Inquiries_Binned': {'label': 'Consultas de Crédito', 'widget': 'selectbox', 'api': 'Num_Credit_Inquiries_Binned'}, 'Num_of_Delayed_Payment': {'label': None, 'widget': None, 'api': None}, 'Num_of_Delayed_Payment_Binned': {'label': 'Pagamentos Atrasados', 'widget': 'selectbox', 'api': 'Num_of_Delayed_Payment_Binned'}, 'Num_of_Loan': {'label': None, 'widget': None, 'api': None}, 'Num_of_Loan_Binned': {'label': 'Nº de Empréstimos', 'widget': 'selectbox', 'api': 'Num_of_Loan_Binned'}, 'Occupation': {'label': 'Ocupação', 'widget': 'selectbox', 'api': 'Occupation'}, 'Occupation_Group_Architect': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Developer': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Doctor': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Engineer': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Entrepreneur': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Journalist': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Lawyer': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Manager': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Mechanic': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Media_Manager': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Musician': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Other': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Scientist': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Teacher': {'label': None, 'widget': None, 'api': None}, 'Occupation_Group_Writer': {'label': None, 'widget': None, 'api': None}, 'Outstanding_Debt': {'label': None, 'widget': None, 'api': None}, 'Outstanding_Debt_Binned': {'label': 'Dívida', 'widget': 'selectbox', 'api': 'Outstanding_Debt_Binned'}, 'Outstanding_Debt_Binned_High': {'label': None, 'widget': None, 'api': None}, 'Outstanding_Debt_Binned_Low': {'label': None, 'widget': None, 'api': None}, 'Outstanding_Debt_Binned_Moderate': {'label': None, 'widget': None, 'api': None}, 'Outstanding_Debt_Binned_Very High': {'label': None, 'widget': None, 'api': None}, 'Payment_Behaviour_High_spent_Medium_value_payments': {'label': None, 'widget': None, 'api': None}, 'Payment_Behaviour_High_spent_Small_value_payments': {'label': None, 'widget': None, 'api': None}, 'Payment_Behaviour_Low_spent_Large_value_payments': {'label': None, 'widget': None, 'api': None}, 'Payment_Behaviour_Low_spent_Medium_value_payments': {'label': None, 'widget': None, 'api': None}, 'Payment_Behaviour_Low_spent_Small_value_payments': {'label': None, 'widget': None, 'api': None}, 'Payment_Behaviour_Other': {'label': None, 'widget': None, 'api': None}, 'Payment_of_Min_Amount': {'label': 'Pagamento Mínimo', 'widget': 'selectbox', 'api': 'Payment_of_Min_Amount'}, 'Total_EMI_per_month': {'label': None, 'widget': None, 'api': None}, 'Total_EMI_per_month_Binned': {'label': 'EMI Mensal', 'widget': 'selectbox', 'api': 'Total_EMI_per_month_Binned'}, 'Type_of_Loan': {'label': 'Tipo de Empréstimo', 'widget': 'selectbox', 'api': 'Type_of_Loan'}, 'Type_of_Loan_Category_Auto Loan': {'label': None, 'widget': None, 'api': None}, 'Type_of_Loan_Category_Credit-Builder Loan': {'label': None, 'widget': None, 'api': None}, 'Type_of_Loan_Category_Debt Consolidation Loan': {'label': None, 'widget': None, 'api': None}, 'Type_of_Loan_Category_Home Equity Loan': {'label': None, 'widget': None, 'api': None}, 'Type_of_Loan_Category_Mortgage Loan': {'label': None, 'widget': None, 'api': None}, 'Type_of_Loan_Category_Not Specified': {'label': None, 'widget': None, 'api': None}, 'Type_of_Loan_Category_Payday Loan': {'label': None, 'widget': None, 'api': None}, 'Type_of_Loan_Category_Personal Loan': {'label': None, 'widget': None, 'api': None}, 'Type_of_Loan_Category_Student Loan': {'label': None, 'widget': None, 'api': None}}
+# mapping.py
+
+# Dicionário 1: rótulos da UI (dropdowns) → nomes técnicos esperados pelo pipeline
+UI_LABEL_TO_VAR = {
+    "Idade": "Age",
+    "Mês da Análise": "Month",
+    "Ocupação": "Occupation",
+    "Renda Anual": "Annual_Income_Binned",
+    "Salário Mensal em Mãos": "Monthly_Inhand_Salary_Binned",
+    "Saldo Mensal": "Monthly_Balance_Binned",
+    "Taxa de Utilização de Crédito": "Credit_Utilization_Ratio_Binned",
+    "Número de Cartões": "Num_Credit_Card_Binned",
+    "Número de Contas Bancárias": "Num_Bank_Accounts_Binned",
+    "Número de Consultas de Crédito": "Num_Credit_Inquiries_Binned",
+    "Número de Empréstimos": "Num_of_Loan_Binned",
+    "Histórico de Pagamentos Atrasados": "Num_of_Delayed_Payment_Binned",
+    "Atraso após o Vencimento": "Delay_from_due_date_Binned",
+    "Mudança no Limite de Crédito": "Changed_Credit_Limit_Binned",
+    "Valor Investido por Mês": "Amount_invested_monthly_Binned",
+    "Pagamento do Valor Mínimo": "Payment_of_Min_Amount",
+    "Taxa de Juros": "Interest_Rate_Binned",
+    "Mix de Crédito": "Credit_Mix",
+    "Dívida em Aberto": "Outstanding_Debt_Binned",
+    "EMI Total por Mês": "Total_EMI_per_month_Binned",
+    "Idade do Histórico de Crédito": "Credit_History_Age_Binned"
+}
+
+# Dicionário 2: valores discretos (UI) → codificações numéricas esperadas
+OPTIONS_MAP = {
+    "Payment_of_Min_Amount": {
+        "Yes": 1,
+        "No": 0,
+        "NM": 2
+    },
+    "Credit_Mix": {
+        "Standard": 1,
+        "Good": 2,
+        "Bad": 0
+    },
+    "Occupation": {
+        "Scientist": 15,
+        "Teacher": 19,
+        "Engineer": 6,
+        "Entrepreneur": 7,
+        "Lawyer": 10,
+        "Doctor": 5,
+        "Manager": 11,
+        "Accountant": 0,
+        "Writer": 20,
+        "Mechanic": 12,
+        "Media_Manager": 13,
+        "Developer": 4,
+        "Musician": 14,
+        "Journalist": 9,
+        "Architect": 1,
+        "Pilot": 16,
+        "Flight_Attendant": 8,
+        "Graphic_Designer": 17,
+        "Financial_Analyst": 3,
+        "Interior_Designer": 18,
+        "Civil_servant": 2
+    }
+}

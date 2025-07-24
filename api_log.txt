@@ -1,13 +1,0 @@
-Downloading artifacts:   0%|          | 0/1 [00:00<?, ?it/s]Downloading artifacts:   0%|          | 0/1 [00:00<?, ?it/s]
-Downloading artifacts:   0%|          | 0/7 [00:00<?, ?it/s]Downloading artifacts:  14%|█▍        | 1/7 [00:00<00:00, 37117.73it/s]Downloading artifacts:  29%|██▊       | 2/7 [00:00<00:00, 11320.66it/s]Downloading artifacts:  43%|████▎     | 3/7 [00:00<00:00, 2952.35it/s] Downloading artifacts:  57%|█████▋    | 4/7 [00:00<00:00, 3306.51it/s]Downloading artifacts:  71%|███████▏  | 5/7 [00:00<00:00, 3850.81it/s]Downloading artifacts:  86%|████████▌ | 6/7 [00:00<00:00, 4304.06it/s]Downloading artifacts: 100%|██████████| 7/7 [00:00<00:00, 110.30it/s] Downloading artifacts: 100%|██████████| 7/7 [00:00<00:00, 110.04it/s]
-INFO:     Started server process [78894]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     127.0.0.1:33348 - "POST /predict HTTP/1.1" 500 Internal Server Error
-INFO:     127.0.0.1:59818 - "GET / HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:59818 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:36298 - "GET / HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:43968 - "GET /?id=63353b20-4623-4dad-ab08-956ed4ae91f1&vscodeBrowserReqId=1753305732637 HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:45310 - "POST /predict HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55040 - "POST /predict HTTP/1.1" 500 Internal Server Error
