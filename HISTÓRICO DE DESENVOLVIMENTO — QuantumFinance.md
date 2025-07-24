@@ -403,3 +403,52 @@ Após a detecção de inconsistências técnicas nos registros anteriores (run_i
 - Este modelo é agora a base canônica para as etapas seguintes: exportação de pipeline, deploy da API FastAPI e interface via Streamlit.
 
 📌 A partir deste ponto, qualquer nova alteração deve ser registrada como nova versão (`v2`, `v3`, etc.), mantendo o `v1-final` imutável para rastreabilidade de produção.
+
+#### Etapa 5 (Exportação física, testes de API e tratamento de erros críticos)
+
+Com o congelamento oficial do modelo `v1-final`, iniciou-se a etapa de exportação física e integração com as aplicações externas (API FastAPI e interface Streamlit). No entanto, esta fase revelou uma série de erros operacionais, estruturais e conceituais, que exigiram diagnóstico profundo, correções e ajustes de protocolo.
+
+**5.1 Exportação física do modelo**
+
+- O pipeline completo foi exportado a partir do MLflow com sucesso para:
+  - `/workspace/models/exportado_rf_v1_final/pipeline`
+- O manifesto auxiliar foi criado no formato `.json`, contendo `run_id`, `timestamp`, caminho do modelo e instrução `mlflow.pyfunc.load_model(...)` para uso futuro:
+  - `/workspace/models/exportado_rf_v1_final/manifesto_rf_v1.json`
+
+**5.2 Teste inicial com FastAPI**
+
+- O script `test_api.py` foi criado para simular chamadas à API utilizando o exemplo salvo `input_example_rf_v1.csv`.
+- Ao rodar o teste, ocorreu **erro 500**, com mensagem clara de **incompatibilidade com o schema MLflow**.
+- A mensagem indicava, por exemplo: `Incompatible input types for column Month_August. Can not safely convert bool to int64`.
+
+**5.3 Diagnóstico e causa raiz**
+
+- Descobriu-se que os dados utilizados como input foram criados manualmente, desrespeitando o tipo inferido durante o registro do modelo.
+- Apesar de todos os dados estarem disponíveis e versionados, a inferência do schema havia sido feita com tipos específicos (`int64`, `float64`, `string`), e não permitia `bool` mesmo quando semanticamente equivalentes.
+- Isso gerou **erros de schema enforcement rígido** do MLflow, mesmo com estrutura de colunas correta.
+
+**5.4 Correção com pipeline oficial**
+
+- A partir do pipeline oficial registrado, foi feita uma aplicação real sobre os dados `train_curated_v1_final.csv` para gerar um `input_example` compatível:
+  - O DataFrame de entrada foi transformado com o pipeline salvo;
+  - As colunas foram renomeadas e os tipos ajustados conforme o schema oficial (evitando booleanos);
+  - Esse input corrigido foi usado tanto no teste da API quanto na interface Streamlit.
+
+**5.5 Problemas com caminhos e versionamento**
+
+- Houve falhas repetidas ao localizar os arquivos versionados, como `train_curated_v1_final.csv`;
+- Isso ocorreu por **uso incorreto de caminhos antigos (`/data/staged`)**, **erros de digitação**, e **tentativa de uso de arquivos não rastreados pelo DVC**;
+- Como correção, os caminhos foram restabelecidos com base nos notebooks anteriores (ex: `adequacao_desenvolvimento.ipynb`), e a recuperação via DVC foi explicitamente exigida antes de qualquer uso.
+
+**5.6 Testes finais da API e da interface Streamlit**
+
+- Após validações, o modelo `v1-final` foi corretamente carregado pela API FastAPI;
+- A interface Streamlit foi conectada à API usando o novo input;
+- As predições foram recebidas com sucesso e exibidas corretamente.
+
+**Conclusão da Etapa 5:**
+
+- Apesar de o modelo estar congelado corretamente, a integração revelou falhas importantes na consistência entre input de inferência e schema inferido;
+- Os erros foram solucionados com reconstrução baseada no pipeline real;
+- Foram bloqueadas heurísticas de inferência automática de tipos ou nomes, passando-se a exigir input gerado diretamente pelo pipeline e versão oficial.
+
