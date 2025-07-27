@@ -1,68 +1,79 @@
-# api_preditor_v1.py
-# API FastAPI que consome a função transform_input e executa predição com o modelo v1-final
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-import mlflow.pyfunc
-from transformador_input import transform_input
+# interface_streamlit_v1.py
+# Interface Streamlit com envio automático de API Key para a API FastAPI
 
-# Carrega o modelo MLflow
-MODEL_PATH = "/workspace/models/exportado_rf_v1_final/pipeline"
-model = mlflow.pyfunc.load_model(MODEL_PATH)
+import streamlit as st
+import requests
 
-# Mapeamento opcional das classes numéricas → textuais
-CLASS_MAP = {0: "Poor", 1: "Standard", 2: "Good"}
+# Configuração do endpoint e chave de autenticação
+API_URL = "http://localhost:8080/predict"
+API_KEY = "quantumfinance-secret"  # mesma chave definida na API
 
-app = FastAPI(
-    title="API Classificador de Crédito",
-    description="Recebe 21 variáveis humanas, transforma em 92 features e retorna classe prevista",
-    version="1.0",
-)
+st.title("Classificador de Crédito – QuantumFinance")
+st.write("Preencha as informações e obtenha o score previsto pelo modelo v1-final:")
 
-# Define os 21 campos de entrada
-class InputPayload(BaseModel):
-    Age: int
-    Annual_Income: float
-    Monthly_Inhand_Salary: float
-    Num_Bank_Accounts: int
-    Num_Credit_Card: int
-    Interest_Rate: float
-    Delay_from_due_date: int
-    Num_of_Delayed_Payment: int
-    Changed_Credit_Limit: float
-    Num_Credit_Inquiries: int
-    Credit_History_Age: str
-    Total_EMI_per_month: float
-    Amount_invested_monthly: float
-    Monthly_Balance: float
-    Occupation: str
-    Credit_Mix: str
-    Payment_of_Min_Amount: str
-    Payment_Behaviour: str
-    Type_of_Loan: str
-    Num_of_Loan: int
-    Outstanding_Debt: float
-    Credit_Utilization_Ratio: float
+with st.form("formulario_credit_score"):
+    Age = st.number_input("Idade (Age)", min_value=18, max_value=100, value=35)
+    Annual_Income = st.number_input("Renda Anual", value=65000.0)
+    Monthly_Inhand_Salary = st.number_input("Salário Mensal Líquido", value=5000.0)
+    Num_Bank_Accounts = st.number_input("Nº Contas Bancárias", min_value=0, value=3)
+    Num_Credit_Card = st.number_input("Nº Cartões de Crédito", min_value=0, value=2)
+    Interest_Rate = st.number_input("Taxa de Juros (%)", value=13.0)
+    Delay_from_due_date = st.number_input("Dias Médio de Atraso", value=5)
+    Num_of_Delayed_Payment = st.number_input("Nº Pagamentos Atrasados", value=1)
+    Changed_Credit_Limit = st.number_input("Alteração Limite Crédito", value=15000.0)
+    Num_Credit_Inquiries = st.number_input("Nº Consultas de Crédito", value=2.0)
+    Credit_History_Age = st.text_input("Histórico de Crédito (ex: '8 Years and 2 Months')", value="8 Years and 2 Months")
+    Total_EMI_per_month = st.number_input("EMI Mensal Total", value=300.0)
+    Amount_invested_monthly = st.number_input("Valor Investido Mensal", value=200.0)
+    Monthly_Balance = st.number_input("Saldo Mensal Médio", value=1500.0)
+    Occupation = st.selectbox("Ocupação", ["Scientist","Teacher","Engineer","Entrepreneur","Developer","Lawyer","Mechanic","Media_Manager","Doctor","Manager","Journalist","Musician","Writer","Architect","Other"])
+    Credit_Mix = st.selectbox("Mix de Crédito", ["Standard","Good","Bad"])
+    Payment_of_Min_Amount = st.selectbox("Pagamento Mínimo", ["Yes","No","NM"])
+    Payment_Behaviour = st.selectbox("Comportamento de Pagamento", ["High_spent_Medium_value_payments","Low_spent_Small_value_payments","Other"])
+    Type_of_Loan = st.selectbox("Tipo de Empréstimo", ["Auto Loan","Credit-Builder Loan","Debt Consolidation Loan","Home Equity Loan","Mortgage Loan","Not Specified","Payday Loan","Personal Loan","Student Loan"])
+    Num_of_Loan = st.number_input("Nº de Empréstimos", value=1)
+    Outstanding_Debt = st.number_input("Dívida Atual", value=7500.0)
+    Credit_Utilization_Ratio = st.number_input("Utilização de Crédito (%)", value=35.0)
 
-@app.post("/predict")
-def predict(payload: InputPayload):
-    try:
-        # Converte input para dict
-        payload_dict = payload.dict()
+    submitted = st.form_submit_button("Enviar e Obter Previsão")
 
-        # Transforma dados para as 92 features
-        df_transformed = transform_input(payload_dict)
+    if submitted:
+        payload = {
+            "Age": Age,
+            "Annual_Income": Annual_Income,
+            "Monthly_Inhand_Salary": Monthly_Inhand_Salary,
+            "Num_Bank_Accounts": Num_Bank_Accounts,
+            "Num_Credit_Card": Num_Credit_Card,
+            "Interest_Rate": Interest_Rate,
+            "Delay_from_due_date": Delay_from_due_date,
+            "Num_of_Delayed_Payment": Num_of_Delayed_Payment,
+            "Changed_Credit_Limit": Changed_Credit_Limit,
+            "Num_Credit_Inquiries": Num_Credit_Inquiries,
+            "Credit_History_Age": Credit_History_Age,
+            "Total_EMI_per_month": Total_EMI_per_month,
+            "Amount_invested_monthly": Amount_invested_monthly,
+            "Monthly_Balance": Monthly_Balance,
+            "Occupation": Occupation,
+            "Credit_Mix": Credit_Mix,
+            "Payment_of_Min_Amount": Payment_of_Min_Amount,
+            "Payment_Behaviour": Payment_Behaviour,
+            "Type_of_Loan": Type_of_Loan,
+            "Num_of_Loan": Num_of_Loan,
+            "Outstanding_Debt": Outstanding_Debt,
+            "Credit_Utilization_Ratio": Credit_Utilization_Ratio
+        }
 
-        # Predição
-        prediction = model.predict(df_transformed)
+        try:
+            # Envia requisição com cabeçalho de autenticação
+            headers = {"X-API-Key": API_KEY}
+            response = requests.post(API_URL, json=payload, headers=headers)
 
-        # Mapeia resultado numérico para textual (se aplicável)
-        predicted_class = CLASS_MAP.get(int(prediction[0]), str(prediction[0]))
-
-        return {"classe_prevista": predicted_class}
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro durante a inferência: {str(e)}")
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("api_preditor_v1:app", host="0.0.0.0", port=8000, reload=False)
+            if response.status_code == 200:
+                resultado = response.json()
+                st.success(resultado["classe_prevista"])
+            elif response.status_code == 429:
+                st.error("Limite de requisições atingido. Tente novamente em um minuto.")
+            else:
+                st.error(f"Erro na API: {response.text}")
+        except Exception as e:
+            st.error(f"Erro ao conectar à API: {e}")
