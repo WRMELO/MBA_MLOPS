@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  quantumfinance:
+    build:
+      context: .
+      dockerfile: container_solução/Dockerfile
+    container_name: quantumfinance_app
+    ports:
+      - "8000:8000"   # API FastAPI
+      - "8501:8501"   # Streamlit
+    volumes:
+      - ./src:/workspace/src
+    networks:
+      - rede_quantum
+
+networks:
+  rede_quantum:
+    driver: bridge
