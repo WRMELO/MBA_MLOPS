@@ -6,6 +6,8 @@ O projeto **QuantumFinance** implementa uma solução completa de classificaçã
 
 Todo o desenvolvimento foi conduzido em um **DevContainer** customizado (conforme descrito no histórico), que integra os serviços de MLflow, MinIO, PostgreSQL e ambiente de notebooks. Para a entrega final, a aplicação foi encapsulada em um **container exclusivo** chamado `container_solução`, responsável por rodar **API** e **Streamlit** de forma isolada.
 
+O atendimento às exigências da entrega acadêmica podem ser visualizadas no documento LEIA-ME APÓS O README
+
 ---
 
 ## 🚀 1. Montagem do DevContainer
