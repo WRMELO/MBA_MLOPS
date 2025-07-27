@@ -1,68 +1,88 @@
+# QuantumFinance
 
-# ✅ `README.md` DEFINITIVO — QuantumFinance — Base V5.4
+## 📌 Introdução
 
-Este repositório contém a infraestrutura base para o **Score de Crédito `QuantumFinance`**, aplicando **práticas reais de MLOps**, versionamento de dados (`DVC`), rastreabilidade com `MLflow Tracking` e armazenamento de artefatos no `MinIO`.
+O projeto **QuantumFinance** implementa uma solução completa de classificação de crédito, desde o modelo treinado e versionado até a disponibilização via **API FastAPI** e **interface Streamlit**.
 
----
-
-## 📌 Visão Geral
-
-- **Estrutura 100% baseada em containers**: PostgreSQL, MinIO, MLflow Tracking Server e DevContainer para EDA e scripts.
-- **Rede isolada `mlops_network`** com bind mounts auditáveis.
-- **DevContainer** orquestrado via Compose ➜ reprodutibilidade real.
-- Fluxo `Git ➜ DVC ➜ MinIO ➜ MLflow` testado passo-a-passo.
+Todo o desenvolvimento foi conduzido em um **DevContainer** customizado (conforme descrito no histórico), que integra os serviços de MLflow, MinIO, PostgreSQL e ambiente de notebooks. Para a entrega final, a aplicação foi encapsulada em um **container exclusivo** chamado `container_solução`, responsável por rodar **API** e **Streamlit** de forma isolada.
 
 ---
 
-## 🗂️ Estrutura do Projeto
+## 🚀 1. Montagem do DevContainer
 
-```
-/MBA_MLOPS
- ├── .devcontainer/
- ├── data/
- ├── models/
- ├── notebooks/
- ├── references/
- │   └── docs/
- │       ├── arquitetura.svg
- │       ├── arquitetura.png
- ├── Dockerfile.mlflow
- ├── docker-compose.yml
- ├── README.md
+Para desenvolvimento, utiliza-se o `devcontainer_mba_mlops`, configurado via VS Code Remote Containers. Esse container conecta-se à rede `mba_mlops_mlops_network` e acessa MinIO, PostgreSQL e MLflow.
+
+**Como subir:**
+
+```bash
+docker compose up -d
 ```
 
----
-
-## 🗺️ Diagrama de Arquitetura
-
-### 📌 Versão SVG
-![Arquitetura Geral (SVG)](references/docs/arquitetura.svg)
-
-### 📌 Versão PNG
-![Arquitetura Geral (PNG)](references/docs/arquitetura.png)
+> O arquivo `docker-compose.yml` raiz já orquestra todos os serviços necessários.
 
 ---
 
-## 🗒️ Observações
+## 🚀 2. Montagem do Container de Solução
 
-- Use `docker compose up -d` para subir todos os serviços.
-- Para usar `DVC` dentro do DevContainer, mantenha o `endpointurl` coerente (`minio:9000` na `mlops_network`).
-- Qualquer alteração de credenciais ➜ atualizar `.dvc/config` e `docker-compose.yml`.
+A solução final roda isolada no container `quantumfinance_app`, localizado em `container_solução/`.
+
+### **Passos para montar:**
+
+1. Criar estrutura (já criada no projeto):
+
+```bash
+./setup_container_solucao.sh
+```
+
+2. Construir e subir o container:
+
+```bash
+./container_solução/run_container.sh
+```
+
+3. Verificar que está ativo:
+
+```bash
+docker ps
+```
 
 ---
 
-## ✅ PROTOCOLO V5.4
+## 🚀 3. Iniciando API e Streamlit
 
-Todo o repositório segue o **PROTOCOLO V5.4**:  
-- Precisão antes de velocidade.  
-- Passo único validado por vez.  
-- Registro de falhas, tabelas de trade-off e histórico versionado.
+Com o container ativo, inicie os serviços:
+
+```bash
+./start_services.sh
+```
+
+- **API FastAPI**: [http://localhost:8080/docs](http://localhost:8080/docs)
+- **Interface Streamlit**: [http://localhost:8600](http://localhost:8600)
+
+---
+
+## 🔐 4. Autenticação e Limite de Requisições
+
+- Todas as requisições à API exigem o cabeçalho `X-API-Key` (valor padrão: `quantumfinance-secret`).
+- Implementado **throttling**: máximo de **5 requisições/minuto por IP**.
 
 ---
 
-## 📌 Link direto do diagrama para visualização
+## ✅ 5. Estrutura da Solução
 
-- [Abrir `arquitetura.svg`](./references/docs/arquitetura.svg)
-- [Abrir `arquitetura.png`](./references/docs/arquitetura.png)
+- `src/ativos/api_preditor_v1.py` → API FastAPI com autenticação e throttling.
+- `src/ativos/interface_streamlit_v1.py` → Interface Streamlit que envia automaticamente o cabeçalho correto.
+- `src/ativos/transformador_input.py` → Transformação dos 21 campos humanos para 92 features esperadas pelo modelo.
+- `models/exportado_rf_v1_final/` → Modelo `v1-final` carregado via `joblib`.
+- `container_solução/` → Dockerfile, requirements, compose e scripts de inicialização.
 
 ---
+
+## ✅ 6. Conclusão
+
+- API funcional e segura, com retorno formatado.
+- Streamlit integrado, exibindo previsões `Standard`, `Good` ou `Poor`.
+- Toda a solução pode ser reproduzida com os passos acima, sem ajustes adicionais.
+
+📌 **Status:** Projeto pronto para entrega, seguindo o **PROTOCOLO V6.1**.
+
